@@ -1,8 +1,17 @@
 HRKISS::Application.routes.draw do
   # The priority is based upon order of creation:
 
+  match 'login' => "user_sessions#new",      :as => :login
+  match 'logout' => "user_sessions#destroy", :as => :logout
+
   resources :users
   resources :user_sessions
+
+  root :to => 'application#index'
+
+  namespace :admin do
+    resources :users
+  end
 
   # first created -> highest priority.
 
