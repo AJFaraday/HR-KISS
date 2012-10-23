@@ -1,6 +1,6 @@
 <h1>New User</h1>
 
-  <%= form_for @user, :url => admin_user_path, :method => :put do |f| %>
+  <%= form_for @user do |f| %>
     <%= render :partial => "users/form", :object => f, :locals => { :user => @user } %>
   <%= f.submit "Register" %>
 

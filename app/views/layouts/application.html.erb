@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>HR-Keep It Simple, Stupid!</title>
-  <%= stylesheet_link_tag    :all %>
+  <%= stylesheet_link_tag    'main' %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tags %>
 </head>
@@ -10,7 +10,7 @@
 
   <div id="app_menu">
     <% if current_user %>
-      <% if  current_user.admin? %>
+      <% if  current_user.is_admin? %>
         <h4>Admin Menu</h4>
         <%= link_to 'Manage Users', admin_users_path %>
         <%= link_to 'New User', new_admin_user_path %>

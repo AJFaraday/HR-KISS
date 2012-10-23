@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
 
   def require_admin_user
     logger.debug "ApplicationController::require_admin_user"
-    unless current_user and current_user.admin
+    unless current_user and current_user.is_admin?
       store_location
       flash[:notice] = "You must be logged in as an admin user to access this page."
       redirect_to root_path
