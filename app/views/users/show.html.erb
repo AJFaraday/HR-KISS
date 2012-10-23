@@ -1,34 +1,8 @@
-<p>
-  <b>Email:</b>
-  <%=h @user.email %>
-</p>
+<h1>User: <%= @user.login %></h1>
 
-<p>
-  <b>Login count:</b>
-  <%=h @user.login_count %>
-</p>
-
-<p>
-  <b>Last request at:</b>
-  <%=h @user.last_request_at %>
-</p>
-
-<p>
-  <b>Last login at:</b>
-  <%=h @user.last_login_at %>
-</p>
-
-<p>
-  <b>Current login at:</b>
-  <%=h @user.current_login_at %>
-</p>
-
-<p>
-  <b>Last login ip:</b>
-  <%=h @user.last_login_ip %>
-</p>
-
-<p>
-  <b>Current login ip:</b>
-  <%=h @user.current_login_ip %>
-</p>
+<%= show_attribute @user, 'login' %>
+<%= show_attribute @user, 'name' %>
+<%= show_attribute @user, 'email' %>
+<%= show_attribute @user, 'holiday_allowance' %>
+<%= show_attribute @user, 'holiday_remaining' %>
+<%= show_attribute @user, 'admin' %>

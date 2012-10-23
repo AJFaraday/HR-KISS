@@ -5,7 +5,6 @@ class UsersController < ApplicationController
   before_filter :get_user, :except => [:index, :new, :create]
 
   def index
-
     params[:page] ? @page = params[:page] : @page = 0
     @users = User.all(:limit => 20,
                       :order => 'login ASC',

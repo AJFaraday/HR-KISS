@@ -10,8 +10,9 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <% ['login','name','email','holiday_allowance','holiday_remaining','admin'].each do |attribute| %>
-          <td><%= user.send(attribute) %></td>
+        <td><%= link_to user.login, user_path(user) %></td>
+        <% ['name','email','holiday_allowance','holiday_remaining','admin'].each do |attribute| %>
+          <td><%= attribute_display(user,attribute) %></td>
         <% end  %>
       </tr>
     <% end %>
