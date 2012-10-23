@@ -7,7 +7,11 @@ class User < ActiveRecord::Base
   end 
 
   def is_admin?
-
+    if self.admin
+      self.admin
+    else
+      false
+    end
   end
 
 end

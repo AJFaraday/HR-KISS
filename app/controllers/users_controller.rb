@@ -2,10 +2,14 @@ class UsersController < ApplicationController
 
   before_filter :require_user, :only => [:show, :edit, :update, :delete]
   before_filter :require_admin_user, :only => [:new, :create, :index]
-  before_filter :get_user, :except => [:index, :new, :edit]
+  before_filter :get_user, :except => [:index, :new, :create]
 
   def index
 
+    params[:page] ? @page = params[:page] : @page = 0
+    @users = User.all(:limit => 20,
+                      :order => 'login ASC',
+                      :offset => (@page * 20))
   end
 
   def new
@@ -16,7 +20,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       flash[:notice] = "Your account has been created."
-      redirect_to signup_url
+      redirect_to root_path
     else
       flash[:notice] = "There was a problem creating you."
       render :action => :new
@@ -43,7 +47,7 @@ class UsersController < ApplicationController
 
   def get_user
     if current_user.is_admin?
-      @user = User.find(params[:user])
+      @user = User.find(params[:id])
     else
       @user = current_user
     end

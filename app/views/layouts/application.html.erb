@@ -12,8 +12,8 @@
     <% if current_user %>
       <% if  current_user.is_admin? %>
         <h4>Admin Menu</h4>
-        <%= link_to 'Manage Users', admin_users_path %>
-        <%= link_to 'New User', new_admin_user_path %>
+        <%= link_to 'Manage Users', users_path %>
+        <%= link_to 'New User', new_user_path %>
       <% end %>
       <% link_to 'My Profile', user_path(current_user) %>
     <% else %><!-- No user logged in -->
@@ -31,6 +31,8 @@
     Current user: <%= current_user.inspect %>
   </div>
   -->
+
+  <%= render :partial => 'shared/flash_messages' %>
 
   <%= yield %>
 

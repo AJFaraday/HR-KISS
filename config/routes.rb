@@ -9,10 +9,6 @@ HRKISS::Application.routes.draw do
 
   root :to => 'application#index'
 
-  namespace :admin do
-    resources :users
-  end
-
   # first created -> highest priority.
 
   # Sample of regular route:

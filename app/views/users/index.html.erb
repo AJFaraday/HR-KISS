@@ -1,0 +1,19 @@
+<h1>Users</h1>
+<table class='overview'>
+  <thead>
+    <tr>
+      <% ['Login','Name','Email','Holiday Allowance','Holiday Remaining','Admin'].each do |header| %>
+        <th><%=header%></th>
+      <% end  %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <% ['login','name','email','holiday_allowance','holiday_remaining','admin'].each do |attribute| %>
+          <td><%= user.send(attribute) %></td>
+        <% end  %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
