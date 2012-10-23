@@ -1,8 +1,7 @@
 <h1>New User</h1>
 
-  <%= form_for @user do |f| %>
-    <%= render :partial => "users/form", :object => f, :locals => { :user => @user } %>
+<% hr_form_for @user do |f| %>
+  <%= render :partial => "users/form", :object => f, :locals => { :user => @user } %>
   <%= f.submit "Register" %>
-
 <% end %>
 

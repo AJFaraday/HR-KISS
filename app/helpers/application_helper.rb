@@ -26,4 +26,10 @@ HTML
     end
   end
 
+  def hr_form_for(object, options={}, &block)
+    concat(capture do
+      form_for(object, options.merge(:builder => HrFormBuilder), &block)
+    end)
+  end
+
 end

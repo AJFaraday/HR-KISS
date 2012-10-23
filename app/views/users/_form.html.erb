@@ -1,6 +1,5 @@
 <%= render "shared/error_messages", :target => @user %>
 
-
 <p>
   <%= form.label :login %><br />
   <%= form.text_field :login %>
@@ -30,6 +29,6 @@
 
   <p>
     <%= form.label :admin%><br/>
-    <%= form.check_box :admin %>
+    <%= form.js_check_box :admin %>
   </p>
 <% end %>
