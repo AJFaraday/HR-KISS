@@ -1,0 +1,10 @@
+<h1>Editing User: <%= @user.login %></h1>
+
+<% hr_form_for @user do |f| %>
+  <%= render :partial => "users/form", :object => f, :locals => { :user => @user } %>
+  <%= f.submit "Edit" %>
+<% end %>
+
+<% content_for :menu do %>
+  <%= menu_items(user_menu(@user)) %>
+<% end %>

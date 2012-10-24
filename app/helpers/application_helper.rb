@@ -32,4 +32,21 @@ HTML
     end)
   end
 
+  # style for menu items:
+  # menu items([{:text => 'home', :url => root_path},
+  #             {:text => 'log in', :url => login_path}
+  #            ])
+
+  def menu_items(items=[])
+    result = ""
+    items.each do |item|
+      if item[:url]
+        result << "<span class='menu_item'>#{link_to(item[:text], item[:url])}</span>"
+      else
+        result << "<span class='menu_item'>#{item[:text]}</span>"
+      end
+    end
+    ActiveSupport::SafeBuffer.new(result)
+  end
+
 end

@@ -8,20 +8,26 @@
 </head>
 <body>
 
-  <div id="app_menu">
+  <div id="app_menu" class='menu'>
     <% if current_user %>
-      <% if  current_user.is_admin? %>
-        <h4>Admin Menu</h4>
-        <%= link_to 'Manage Users', users_path %>
-        <%= link_to 'New User', new_user_path %>
-      <% end %>
-      <% link_to 'My Profile', user_path(current_user) %>
+      <%= menu_items([{:text => 'Home', :url => root_url},
+                      {:text => 'My Profile', :url => user_path(current_user)},
+                      {:text => 'Log out', :url => logout_url}]) %>
     <% else %><!-- No user logged in -->
-      <%= link_to 'Log in', login_path %>
+      <%= menu_items([{:text =>'Log in', :url => login_path}]) %>
     <% end %>
   </div>
- 
-  <div id='controller_menu'>
+
+  <div id='admin_menu' class='menu'>
+    <% if current_user and current_user.is_admin? %>
+        <h4 class='menu_title'>Admin Menu</h4>
+      <%= menu_items([{:text => 'Manage Users', :url => users_path},
+                      {:text => 'New User',     :url => new_user_path}
+                     ]) %>
+    <% end %>
+  </div>
+
+  <div id='controller_menu' class='menu'>
     <%= yield :menu %>
   </div>
 
