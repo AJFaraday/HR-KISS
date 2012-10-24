@@ -18,11 +18,14 @@ HTML
     return value
   end
 
-  def show_boolean(value)
+  def show_boolean(value, opts={})
+    opts[:true_image] ? true_image = opts[:true_image] : true_image = '/images/tick.png'
+    opts[:false_image] ? false_image = opts[:false_image] : false_image = '/images/tick.png'
+
     if value
-      return raw "<img src='/images/tick.png'>"
+      return raw "<img src='#{true_image}'>"
     else
-      return raw "<img src='/images/cross.png'>"
+      return raw "<img src='#{false_image}'>"
     end
   end
 
