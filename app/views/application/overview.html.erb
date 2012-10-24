@@ -1,0 +1,4 @@
+<h1>HR Overview</h1>
+<p>You are logged in <%= "as an admin" if current_user.is_admin? %>.</p>
+<p>You have <%= current_user.holiday_allowance %> days of holiday this year.</p>
+<p>You have <%= current_user.holiday_remaining %> days of holiday left, this year.</p>

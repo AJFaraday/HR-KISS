@@ -6,6 +6,10 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user, :require_admin_user
 
   def index
+    render :overview if current_user
+  end
+
+  def overview
 
   end
 
