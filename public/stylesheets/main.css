@@ -1,3 +1,5 @@
+/* layout and menu*/
+
 h4.menu_title {
   line-height: 20px;
   margin: 2px;
@@ -6,3 +8,22 @@ h4.menu_title {
 span.menu_item {
   margin: 0px 4px 0px 0px;
 }
+
+/* forms */
+
+form {
+  width:100%;
+}
+
+form > p {
+  width:100%;
+  margin: 0px;
+}
+
+label {
+    display: inline-block;
+    font-weight: bold;
+    padding: 4px 0px 4px 0px;
+    width: 250px;
+}
+
