@@ -10,7 +10,24 @@ class User < ActiveRecord::Base
 
   acts_as_authentic do |auth|
     auth.login_field = "login"
-  end 
+  end
+
+  has_many :absences do
+
+    # named_scope equivalents (seems standard for rails 3)
+    def current
+      all(:conditions => ['start_time < ? and end_time > ?', Time.now, Time.now], :order => "start_time ASC")
+    end
+
+    def past
+      all(:conditions => ['end_time < ?', Time.now], :order => "start_time ASC")
+    end
+
+    def future
+      all(:conditions => ['start_time > ?', Time.now], :order => "start_time ASC")
+    end
+
+  end
 
   def is_admin?
     if self.admin
@@ -25,6 +42,14 @@ class User < ActiveRecord::Base
       self.errors.add(:base, "You can not stop the last admin user being an admin.")
       return false
     end
+  end
+
+  def absent?
+    absences.current.any?
+  end
+
+  def present?
+    !absent?
   end
 
 end
