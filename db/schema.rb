@@ -10,7 +10,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121025095739) do
+ActiveRecord::Schema.define(:version => 20121025100235) do
+
+  create_table "absences", :force => true do |t|
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string   "type"
+    t.text     "reason"
+    t.string   "status"
+    t.float    "days"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "user_sessions", :force => true do |t|
     t.string   "session_id"

@@ -37,3 +37,7 @@ label {
   position:relative;
   float:left;
 }
+
+.field_with_errors{
+  background-color:#ff5555;
+}

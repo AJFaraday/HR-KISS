@@ -7,6 +7,8 @@ HRKISS::Application.routes.draw do
   resources :users
   resources :user_sessions
 
+  resources :absences
+
   root :to => 'application#index'
 
   # first created -> highest priority.
