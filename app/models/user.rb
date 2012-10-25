@@ -2,6 +2,12 @@ class User < ActiveRecord::Base
 
   before_save :stop_admin_deficit
 
+  belongs_to :line_manager, :foreign_key => 'line_manager_id', :class_name => 'User'
+  has_many :subordinates, :foreign_key => 'line_manager_id', :class_name => 'User'
+
+  validates_presence_of :line_manager_id
+  validates_presence_of :name
+
   acts_as_authentic do |auth|
     auth.login_field = "login"
   end 

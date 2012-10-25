@@ -24,10 +24,16 @@ form > p {
   margin: 0px;
 }
 
-label {
-    display: inline-block;
-    font-weight: bold;
-    padding: 4px 0px 4px 0px;
-    width: 250px;
+form > br {
+   display: block;
+   margin: 2px;
 }
 
+label {
+  display: inline-block;
+  font-weight: bold;
+  padding: 4px 0px 4px 0px;
+  width: 250px;
+  position:relative;
+  float:left;
+}

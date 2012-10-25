@@ -2,41 +2,44 @@
 <html>
 <head>
   <title>HR-Keep It Simple, Stupid!</title>
-  <%= stylesheet_link_tag    'main' %>
+  <%= stylesheet_link_tag 'main' %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-  <div id="app_menu" class='menu'>
-    <% if current_user %>
-      <%= menu_items([{:text => 'Home', :url => root_url},
-                      {:text => 'My Profile', :url => user_path(current_user)},
-                      {:text => 'Log out', :url => logout_url}]) %>
-    <% else %><!-- No user logged in -->
-      <%= menu_items([{:text =>'Log in', :url => login_path}]) %>
-    <% end %>
-  </div>
+  <div class='header'>
+    <div id="app_menu" class='menu'>
+      <% if current_user %>
+        <%= menu_items([{:text => 'Home', :url => root_url},
+                        {:text => 'My Profile', :url => user_path(current_user)},
+                        {:text => 'Log out', :url => logout_url}]) %>
+      <% else %><!-- No user logged in -->
+        <%= menu_items([{:text => 'Home', :url => root_url}]) %>
+        <%= menu_items([{:text =>'Log in', :url => login_path}]) unless params[:action] == 'new' and params[:controller] = 'user_sessions'%>
+      <% end %>
+    </div>
 
-  <div id='admin_menu' class='menu'>
-    <% if current_user and current_user.is_admin? %>
+    <div id='admin_menu' class='menu'>
+      <% if current_user and current_user.is_admin? %>
         <h4 class='menu_title'>Admin Menu</h4>
-      <%= menu_items([{:text => 'Manage Users', :url => users_path},
-                      {:text => 'New User',     :url => new_user_path}
-                     ]) %>
-    <% end %>
-  </div>
+        <%= menu_items([{:text => 'Manage Users', :url => users_path},
+                        {:text => 'New User', :url => new_user_path}
+                       ]) %>
+      <% end %>
+    </div>
 
-  <div id='controller_menu' class='menu'>
-    <%= yield :menu %>
-  </div>
+    <div id='controller_menu' class='menu'>
+      <%= yield :menu %>
+    </div>
 
-  <!--
-  <div id='debug_menu'>
-    <h4>Debugging Stuff</h4>
-    Current user: <%= current_user.inspect %>
+    <!--
+    <div id='debug_menu'>
+      <h4>Debugging Stuff</h4>
+      Current user: <%= current_user.inspect %>
+    </div>
+    -->
   </div>
-  -->
 
   <%= render :partial => 'shared/flash_messages' %>
 

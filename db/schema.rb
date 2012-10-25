@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121022145055) do
+ActiveRecord::Schema.define(:version => 20121025095739) do
 
   create_table "user_sessions", :force => true do |t|
     t.string   "session_id"
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(:version => 20121022145055) do
     t.boolean  "admin"
     t.float    "holiday_allowance"
     t.float    "holiday_remaining"
+    t.float    "sick_day_allowance"
+    t.integer  "line_manager_id"
   end
 
 end
