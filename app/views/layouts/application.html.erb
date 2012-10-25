@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HR-Keep It Simple, Stupid!</title>
+  <title>HR - Keep It Simple, Stupid!</title>
   <%= stylesheet_link_tag 'main' %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tags %>
@@ -33,12 +33,6 @@
       <%= yield :menu %>
     </div>
 
-    <!--
-    <div id='debug_menu'>
-      <h4>Debugging Stuff</h4>
-      Current user: <%= current_user.inspect %>
-    </div>
-    -->
   </div>
 
   <%= render :partial => 'shared/flash_messages' %>

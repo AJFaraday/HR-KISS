@@ -10,12 +10,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121025100235) do
+ActiveRecord::Schema.define(:version => 20121025115726) do
 
   create_table "absences", :force => true do |t|
     t.datetime "start_time"
     t.datetime "end_time"
-    t.string   "type"
+    t.string   "variety"
     t.text     "reason"
     t.string   "status"
     t.float    "days"

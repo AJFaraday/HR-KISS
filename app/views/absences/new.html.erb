@@ -1,0 +1,6 @@
+<h1>Request Absence</h1>
+
+<% hr_form_for @absence do |f| %>
+  <%= render :partial => 'form', :object => f, :locals => { :user => @absence } %>
+  <%= f.submit "Request" %>
+<% end %>

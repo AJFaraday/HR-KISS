@@ -1,0 +1,18 @@
+<%= render "shared/error_messages", :target => @absence %>
+
+<%= form.select :user_id, User.all(:order => 'name ASC').collect{|u| [u.name,u.id]} %>
+<%= form.date_select :start_time,
+                     :order => [:day, :month, :year],
+                     :append=> form.halffull_check_box(:start_half_day,
+                                                       :skip_label => true) %>
+<%= form.date_select :end_time,
+                     :order => [:day, :month, :year],
+                     :append=> form.halffull_check_box(:end_half_day,
+                                                       :skip_label => true) %>
+<%= form.select :variety, ['Holiday','Sick Days'] %>
+<%= form.text_area :reason, :rows => 3 %>
+<% if current_user.is_admin? %>
+  <%= form.select :status, ['Approved','Declined','Pending'] %>
+<% else  %>
+  <%= form.hidden_field :user_id  %>
+<% end %>
