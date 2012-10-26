@@ -10,6 +10,15 @@ module ApplicationHelper
 HTML
   end
 
+  def show_exact(label, value)
+    return raw <<HTML
+<p>
+  <b>#{label.capitalize}</b>
+  #{value}
+</p>
+HTML
+  end
+
   def attribute_display(object,attribute)
     value = object.send(attribute)
     if value.is_a?(TrueClass) or value.is_a?(FalseClass)

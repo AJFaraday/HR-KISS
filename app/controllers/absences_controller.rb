@@ -7,7 +7,7 @@ class AbsencesController < ApplicationController
     if current_user.is_admin?
       @absences = Absence.all # TODO limit to future, add parameters for archive
     else
-      @absences = Absence.all(:conditions => ['user_id = ?', current_user.id])
+      @absences = current_user.absences
     end
   end
 
@@ -25,6 +25,10 @@ class AbsencesController < ApplicationController
     else
       render :new
     end
+  end
+
+  def show
+    @absence = Absence.find(params[:id])
   end
 
 end

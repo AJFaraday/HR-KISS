@@ -8,36 +8,37 @@
 </head>
 <body>
 
-  <div class='header'>
-    <div id="app_menu" class='menu'>
-      <% if current_user %>
-        <%= menu_items([{:text => 'Home', :url => root_url},
-                        {:text => 'My Profile', :url => user_path(current_user)},
-                        {:text => 'Log out', :url => logout_url}]) %>
-      <% else %><!-- No user logged in -->
-        <%= menu_items([{:text => 'Home', :url => root_url}]) %>
-        <%= menu_items([{:text =>'Log in', :url => login_path}]) unless params[:action] == 'new' and params[:controller] = 'user_sessions'%>
-      <% end %>
-    </div>
-
-    <div id='admin_menu' class='menu'>
-      <% if current_user and current_user.is_admin? %>
-        <h4 class='menu_title'>Admin Menu</h4>
-        <%= menu_items([{:text => 'Manage Users', :url => users_path},
-                        {:text => 'New User', :url => new_user_path}
-                       ]) %>
-      <% end %>
-    </div>
-
-    <div id='controller_menu' class='menu'>
-      <%= yield :menu %>
-    </div>
-
+<div class='header'>
+  <div id="app_menu" class='menu'>
+    <% if current_user %>
+      <%= menu_items([{:text => 'Home', :url => root_url},
+                      {:text => 'My Profile', :url => user_path(current_user)},
+                      {:text => 'Absences', :url => absences_path()},
+                      {:text => 'Log out', :url => logout_url}]) %>
+    <% else %><!-- No user logged in -->
+      <%= menu_items([{:text => 'Home', :url => root_url}]) %>
+      <%= menu_items([{:text =>'Log in', :url => login_path}]) unless params[:action] == 'new' and params[:controller] = 'user_sessions' %>
+    <% end %>
   </div>
 
-  <%= render :partial => 'shared/flash_messages' %>
+  <% if current_user and current_user.is_admin? %>
+    <div id='admin_menu' class='menu'>
+      <h4 class='menu_title'>Admin Menu</h4>
+      <%= menu_items([{:text => 'Manage Users', :url => users_path},
+                      {:text => 'New User', :url => new_user_path}
+                     ]) %>
+    </div>
+  <% end %>
 
-  <%= yield %>
+  <div id='controller_menu' class='menu'>
+    <%= yield :menu %>
+  </div>
+
+</div>
+
+<%= render :partial => 'shared/flash_messages' %>
+
+<%= yield %>
 
 </body>
 </html>

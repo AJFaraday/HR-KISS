@@ -1,0 +1,8 @@
+<h1><%= @absence.variety %>:<%= @absence.show_time %></h1>
+
+<%= show_exact 'User', @absence.user.name %>
+<%= show_attribute @absence, 'start_time' %>
+<%= show_attribute @absence, 'end_time' %>
+<%= show_attribute @absence, 'days' %>
+<%= show_attribute @absence, 'reason' %>
+<%= show_attribute @absence, 'status' %>

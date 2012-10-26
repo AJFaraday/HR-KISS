@@ -14,6 +14,7 @@ class Absence < ActiveRecord::Base
 
   validate :set_start_time
   validate :set_end_time
+  validate :validate_start_is_before_end
   validate :no_sick_days_in_advance
   validate :approve_if_already_passed
 
@@ -32,7 +33,7 @@ class Absence < ActiveRecord::Base
 
   def set_end_time
     if end_time and end_time.is_a?(Time)
-      if end_half_day = '1'
+      if end_half_day == '1'
         end_time.change(:hour => 13)
       else
         end_time.change(:hour => 17)
@@ -56,6 +57,12 @@ class Absence < ActiveRecord::Base
     end
   end
 
+  def validate_start_is_before_end
+    if start_time > end_time
+      errors.add :base, "You can not start your absence after you end your absence."
+    end
+  end
+
   # named_scope equivalents (seems standard for rails 3)
   def current
     all(:conditions => ['start_time < ? and end_time > ?', Time.now, Time.now], :order => "start_time ASC")
@@ -70,5 +77,13 @@ class Absence < ActiveRecord::Base
   end
 
 
+  # presentation methods
+  def to_s
+    "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%Y')} to #{end_time.strftime('%d-%m-%Y')}"
+  end
+
+  def show_time
+    "#{start_time.strftime('%d-%m-%Y')} to #{end_time.strftime('%d-%m-%Y')}"
+  end
 
 end
