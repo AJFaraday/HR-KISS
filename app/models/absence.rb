@@ -27,7 +27,7 @@ class Absence < ActiveRecord::Base
   # validations
   def set_start_time
     if start_time and start_time.is_a?(Time)
-      if single_day and single_day == true
+      if single_day and single_day == '1'
         case start_half_day
           when "Full Day"
             start_time.change(:hour => 9)            
@@ -50,8 +50,8 @@ class Absence < ActiveRecord::Base
 
   def set_end_time
     if end_time and end_time.is_a?(Time)
-      if single_day and single_day == true
-        case end_half_day
+      if single_day and single_day == '1'
+        case start_half_day
           when "Full Day"
             end_time.change(:hour => 17)            
           when 'Afternoon'

@@ -18,7 +18,7 @@
                                              :skip_label => true)  %>
   <%= form.date_select :end_time,
                        :order => [:day, :month, :year],
-                       :append=> form.select(:start_half_day, ['Full Day','Lunch Time'],
+                       :append=> form.select(:end_half_day, ['Full Day','Lunch Time'],
                                              :skip_label => true)  %>
 </div>
 <%= form.select :variety, ['Holiday','Sick Days'] %>
@@ -34,13 +34,19 @@
   function switchTimeStyle(){
     $('#short_hol_form').toggle();
     $('#long_hol_form').toggle();
+    $('select[name=not_start_half_day]').attr('name','placeholder');
+    $('select[name=absence[start_half_day]]').attr('name','not_start_half_day')
+    $('select[name=placeholder]').attr('name','absence[start_half_day]')
+
   }
   if ($('#absence_single_day')[0].checked){
     $('#short_hol_form').show();
     $('#long_hol_form').hide();
-  }
+    $('#long_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');
+      }
   else {
     $('#short_hol_form').hide();
+    $('#short_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');
     $('#long_hol_form').show();
   }
 </script>
