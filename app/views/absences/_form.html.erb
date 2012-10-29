@@ -1,14 +1,26 @@
 <%= render "shared/error_messages", :target => @absence %>
 
 <%= form.select :user_id, User.all(:order => 'name ASC').collect{|u| [u.name,u.id]} %>
-<%= form.date_select :start_time,
-                     :order => [:day, :month, :year],
-                     :append=> form.halffull_check_box(:start_half_day,
-                                                       :skip_label => true) %>
-<%= form.date_select :end_time,
-                     :order => [:day, :month, :year],
-                     :append=> form.halffull_check_box(:end_half_day,
-                                                       :skip_label => true) %>
+
+<%= form.js_check_box :single_day, :on_click => 'switchTimeStyle();' %>
+
+<div id='short_hol_form' style='display:none;'>
+    <%= form.date_select :start_time,
+                       :order => [:day, :month, :year],
+                       :append=> form.select(:start_half_day, ['Full Day','Morning','Afternoon'],
+                                             :skip_label => true),
+                       :label => 'Absence Time' %>
+</div>
+<div id='long_hol_form'>
+  <%= form.date_select :start_time,
+                       :order => [:day, :month, :year],
+                       :append=> form.select(:start_half_day, ['Full Day','Lunch Time'],
+                                             :skip_label => true)  %>
+  <%= form.date_select :end_time,
+                       :order => [:day, :month, :year],
+                       :append=> form.select(:start_half_day, ['Full Day','Lunch Time'],
+                                             :skip_label => true)  %>
+</div>
 <%= form.select :variety, ['Holiday','Sick Days'] %>
 <%= form.text_area :reason, :rows => 3 %>
 <% if current_user.is_admin? %>
@@ -16,3 +28,19 @@
 <% else  %>
   <%= form.hidden_field :user_id  %>
 <% end %>
+
+
+<script type='text/javascript'>
+  function switchTimeStyle(){
+    $('#short_hol_form').toggle();
+    $('#long_hol_form').toggle();
+  }
+  if ($('#absence_single_day')[0].checked){
+    $('#short_hol_form').show();
+    $('#long_hol_form').hide();
+  }
+  else {
+    $('#short_hol_form').hide();
+    $('#long_hol_form').show();
+  }
+</script>

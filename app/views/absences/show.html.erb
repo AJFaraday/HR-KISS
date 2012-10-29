@@ -6,3 +6,7 @@
 <%= show_attribute @absence, 'days' %>
 <%= show_attribute @absence, 'reason' %>
 <%= show_attribute @absence, 'status' %>
+
+<% content_for :menu do %>
+  <%= menu_items(absence_menu(@absence)) %>
+<% end %>

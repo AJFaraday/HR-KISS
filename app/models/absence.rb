@@ -1,5 +1,8 @@
 # Statuses ['Approved','Declined','Pending']
 # varieties ['Holiday','Sick Days']
+# Possible start ['Full Day','Morning','Afternoon']
+# Possible end ['Full Day'.'lunch time']
+
 
 class Absence < ActiveRecord::Base
 
@@ -8,6 +11,9 @@ class Absence < ActiveRecord::Base
   # accessors used to produce start and end time
   attr_accessor :start_half_day
   attr_accessor :end_half_day
+  attr_accessor :single_day
+
+  attr_accessor :single_morning
 
   validates_presence_of :reason
   validates_presence_of :variety
@@ -21,10 +27,21 @@ class Absence < ActiveRecord::Base
   # validations
   def set_start_time
     if start_time and start_time.is_a?(Time)
-      if start_half_day == '1'
-        start_time.change(:hour => 13)
+      if single_day and single_day == true
+        case start_half_day
+          when "Full Day"
+            start_time.change(:hour => 9)            
+          when 'Afternoon'
+            start_time.change(:hour => 13)            
+          when 'Morning'
+            start_time.change(:hour => 9)            
+        end
       else
-        start_time.change(:hour => 9)
+        if start_half_day == 'Full Day'
+          start_time.change(:hour => 9)
+        else
+          start_time.change(:hour => 13)
+        end
       end
     else
       errors.add :start_time, "can not be blank."
@@ -33,10 +50,21 @@ class Absence < ActiveRecord::Base
 
   def set_end_time
     if end_time and end_time.is_a?(Time)
-      if end_half_day == '1'
-        end_time.change(:hour => 13)
+      if single_day and single_day == true
+        case end_half_day
+          when "Full Day"
+            end_time.change(:hour => 17)            
+          when 'Afternoon'
+            end_time.change(:hour => 17)            
+          when 'Morning'
+            end_time.change(:hour => 13)            
+        end
       else
-        end_time.change(:hour => 17)
+        if end_half_day == 'Full Day'
+          end_time.change(:hour => 17)
+        else
+          end_time.change(:hour => 13)
+        end
       end
     else
       errors.add :end_time, "can not be blank."
