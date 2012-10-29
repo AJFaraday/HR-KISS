@@ -13,8 +13,6 @@ class Absence < ActiveRecord::Base
   attr_accessor :end_half_day
   attr_accessor :single_day
 
-  attr_accessor :single_morning
-
   validates_presence_of :reason
   validates_presence_of :variety
 
