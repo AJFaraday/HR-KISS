@@ -1,6 +1,6 @@
 <%= render "shared/error_messages", :target => @absence %>
 
-<%= form.select :user_id, User.all(:order => 'name ASC').collect{|u| [u.name,u.id]} %>
+<%= form.select :user_id, User.all(:order => 'name ASC').collect{|u| [u.name,u.id]} if current_user.is_admin? %>
 
 <%= form.js_check_box :single_day, :on_click => 'switchTimeStyle();' %>
 
@@ -43,7 +43,7 @@
     $('#short_hol_form').show();
     $('#long_hol_form').hide();
     $('#long_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');
-      }
+  }
   else {
     $('#short_hol_form').hide();
     $('#short_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');

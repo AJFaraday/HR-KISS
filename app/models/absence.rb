@@ -24,23 +24,27 @@ class Absence < ActiveRecord::Base
   validate :no_sick_days_in_advance
   validate :approve_if_already_passed
 
+  before_save :set_days
+
   # validations
   def set_start_time
-    if start_time and start_time.is_a?(Time)
-      if single_day and single_day == '1'
+    if self.start_time and self.start_time.is_a?(Time)
+      single_day = start_time.to_date == end_time.to_date unless single_day and single_day == '1'
+      if single_day and (single_day == '1' or single_day == true)
+        self.end_time = self.start_time
         case start_half_day
           when "Full Day"
-            start_time.change(:hour => 9)            
+            self.start_time = self.start_time.change(:hour => 9)
           when 'Afternoon'
-            start_time.change(:hour => 13)            
+            self.start_time = self.start_time.change(:hour => 13)
           when 'Morning'
-            start_time.change(:hour => 9)            
+            self.start_time = self.start_time.change(:hour => 9)
         end
       else
         if start_half_day == 'Full Day'
-          start_time.change(:hour => 9)
+          self.start_time = self.start_time.change(:hour => 9)
         else
-          start_time.change(:hour => 13)
+          self.start_time = self.start_time.change(:hour => 13)
         end
       end
     else
@@ -49,21 +53,22 @@ class Absence < ActiveRecord::Base
   end
 
   def set_end_time
-    if end_time and end_time.is_a?(Time)
-      if single_day and single_day == '1'
+    if self.end_time and self.end_time.is_a?(Time)
+      single_day = (start_time.to_date == self.end_time.to_date) unless single_day and single_day == '1'
+      if single_day and (single_day == '1' or single_day == true)
         case start_half_day
           when "Full Day"
-            end_time.change(:hour => 17)            
+            self.end_time = self.end_time.change(:hour => 17)
           when 'Afternoon'
-            end_time.change(:hour => 17)            
+            self.end_time = self.end_time.change(:hour => 17)
           when 'Morning'
-            end_time.change(:hour => 13)            
+            self.end_time = self.end_time.change(:hour => 13)
         end
       else
         if end_half_day == 'Full Day'
-          end_time.change(:hour => 17)
+          self.end_time = self.end_time.change(:hour => 17)
         else
-          end_time.change(:hour => 13)
+          self.end_time = self.end_time.change(:hour => 13)
         end
       end
     else
@@ -104,7 +109,6 @@ class Absence < ActiveRecord::Base
     all(:conditions => ['start_time > ?', Time.now], :order => "start_time ASC")
   end
 
-
   # presentation methods
   def to_s
     "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%Y')} to #{end_time.strftime('%d-%m-%Y')}"
@@ -114,4 +118,34 @@ class Absence < ActiveRecord::Base
     "#{start_time.strftime('%d-%m-%Y')} to #{end_time.strftime('%d-%m-%Y')}"
   end
 
+  def get_days
+    if self.valid?
+      day = start_time.to_date
+      count = 0.0
+      if start_time.hour == 13
+        count += 0.5 if day.workday?
+        day += 1.day
+      end
+      until day >= end_time.to_date do
+        count += 1.0 if day.workday?
+        day = day + 1.day
+      end
+      if end_time.hour == 13
+        count += 0.5 if day.workday?
+      else
+        count += 1 if day.workday?
+      end
+      return count
+    else
+      logger.info 'Invalid absence, not working out days.'
+      return nil
+    end
+  end
+
+  def set_days
+    self.days = get_days
+  end
+
 end
+
+

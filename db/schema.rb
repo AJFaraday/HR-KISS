@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121025115726) do
+ActiveRecord::Schema.define(:version => 20121029142507) do
 
   create_table "absences", :force => true do |t|
     t.datetime "start_time"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20121025115726) do
     t.float    "holiday_remaining"
     t.float    "sick_day_allowance"
     t.integer  "line_manager_id"
+    t.float    "sick_days_remaining"
   end
 
 end
