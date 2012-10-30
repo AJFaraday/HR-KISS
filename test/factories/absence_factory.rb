@@ -8,16 +8,21 @@ FactoryGirl.define do
     reason {'holiday'}
     variety 'Holiday'
     association :user
-    status 'Pending'
-
-    factory :week_holiday do
-
-    end
 
     factory :past_holiday do
       start_time {Date.parse '1-10-2012'}
       end_time {Date.parse '5-10-2012'}
       status 'Approved'
+    end
+
+    factory :long_past_holiday do
+      start_time {Date.parse '1-10-2010'}
+      end_time {Date.parse '5-10-2010'}
+      status 'Approved'
+    end
+
+    factory :sick_day do
+      variety 'Sick Days'
     end
 
     factory :past_sick_day do

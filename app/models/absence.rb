@@ -85,10 +85,10 @@ class Absence < ActiveRecord::Base
 
   def set_status
     if start_time and end_time
-      if end_time < Date.tomorrow.beginning_of_day
-        status ||= 'Approved'
+      if end_time < Date.today.beginning_of_day + 1.minute
+        self.status ||= 'Approved'
       else
-        status ||= 'Pending'
+        self.status ||= 'Pending'
       end
     end
   end

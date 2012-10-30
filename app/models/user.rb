@@ -8,23 +8,25 @@ class User < ActiveRecord::Base
   validates_presence_of :line_manager_id
   validates_presence_of :name
 
+  before_save :set_days
+
   acts_as_authentic do |auth|
     auth.login_field = "login"
   end
 
   has_many :absences do
 
-    def holiday_this_year(status=:all)
+    def holidays_this_year(status=:all)
       if status.in?(['all', :all])
-        all(:conditions => ["start_time <= ? and
-                             end_time >= ? and
+        all(:conditions => ["start_time >= ? and
+                             end_time <= ? and
                              variety = 'Holiday'",
                             Date.today.beginning_of_year,
                             Date.today.end_of_year],
         :order => 'start_time ASC')
       else
-        all(:conditions => ["start_time <= ? and
-                             end_time >= ? and
+        all(:conditions => ["start_time >= ? and
+                             end_time <= ? and
                              variety = 'Holiday' and
                              status = ?",
                             Date.today.beginning_of_year,
@@ -36,16 +38,16 @@ class User < ActiveRecord::Base
 
     def sick_days_this_year(status=:all)
       if status.in?(['all', :all])
-        all(:conditions => ["start_time <= ? and
-                             end_time >= ? and
+        all(:conditions => ["start_time >= ? and
+                             end_time <= ? and
                              variety = 'Sick Days'",
                             Date.today.beginning_of_year,
                             Date.today.end_of_year],
             :order => 'start_time ASC')
 
       else
-        all(:conditions => ["start_time <= ? and
-                             end_time >= ? and
+        all(:conditions => ["start_time >= ? and
+                             end_time <= ? and
                              variety = 'Sick Days' and
                              status = ?",
                             Date.today.beginning_of_year,
@@ -95,7 +97,7 @@ class User < ActiveRecord::Base
 
   def set_days(save_results=false)
     # this years holidays
-    holidays = absences.holiday_this_year('Approved').collect{|x| x.days }.sum
+    holidays = absences.holidays_this_year('Approved').collect{|x| x.days }.sum
     sick_days = absences.sick_days_this_year('Approved').collect{|x| x.days }.sum
     if save_results
       update_attributes(:holiday_remaining => holiday_allowance - holidays,
