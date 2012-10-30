@@ -9,5 +9,13 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
+  def assert_valid(object, message=nil)
+    assert_block(build_message(message, "<?> is not valid.", object.class.to_s)) {object.valid?}
+  end
+
+  def assert_not_valid(object, message=nil)
+      assert_block(build_message(message, "<?> should not be valid.", object.class.to_s)) {!object.valid?}
+  end
+
   # Add more helper methods to be used by all tests here...
 end

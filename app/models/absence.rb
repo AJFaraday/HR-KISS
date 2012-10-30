@@ -21,7 +21,7 @@ class Absence < ActiveRecord::Base
   validate :set_end_time
   validate :validate_start_is_before_end
   validate :no_sick_days_in_advance
-  validate :approve_if_already_passed
+  validate :set_status
 
   before_save :set_days
 
@@ -39,10 +39,10 @@ class Absence < ActiveRecord::Base
             self.start_time = self.start_time.change(:hour => 9)
         end
       else
-        if start_half_day == 'Full Day'
-          self.start_time = self.start_time.change(:hour => 9)
-        else
+        if start_half_day == 'Lunch Time'
           self.start_time = self.start_time.change(:hour => 13)
+        else
+          self.start_time = self.start_time.change(:hour => 9)
         end
       end
     else
@@ -64,10 +64,10 @@ class Absence < ActiveRecord::Base
             self.end_time = self.end_time.change(:hour => 13)
         end
       else
-        if end_half_day == 'Full Day'
-          self.end_time = self.end_time.change(:hour => 17)
-        else
+        if end_half_day == 'Lunch Time'
           self.end_time = self.end_time.change(:hour => 13)
+        else
+          self.end_time = self.end_time.change(:hour => 17)
         end
       end
     else
@@ -83,15 +83,21 @@ class Absence < ActiveRecord::Base
     end
   end
 
-  def approve_if_already_passed
-    if end_time < Date.tomorrow.beginning_of_day
-      status ||= 'Approved'
+  def set_status
+    if start_time and end_time
+      if end_time < Date.tomorrow.beginning_of_day
+        status ||= 'Approved'
+      else
+        status ||= 'Pending'
+      end
     end
   end
 
   def validate_start_is_before_end
-    if start_time > end_time
-      errors.add :base, "You can not start your absence after you end your absence."
+    if start_time and end_time
+      if start_time > end_time
+        errors.add :base, "You can not start your absence after you end your absence."
+      end
     end
   end
 

@@ -14,6 +14,47 @@ class User < ActiveRecord::Base
 
   has_many :absences do
 
+    def holiday_this_year(status=:all)
+      if status.in?(['all', :all])
+        all(:conditions => ["start_time <= ? and
+                             end_time >= ? and
+                             variety = 'Holiday'",
+                            Date.today.beginning_of_year,
+                            Date.today.end_of_year],
+        :order => 'start_time ASC')
+      else
+        all(:conditions => ["start_time <= ? and
+                             end_time >= ? and
+                             variety = 'Holiday' and
+                             status = ?",
+                            Date.today.beginning_of_year,
+                            Date.today.end_of_year,
+                            status],
+            :order => 'start_time ASC')
+      end
+    end
+
+    def sick_days_this_year(status=:all)
+      if status.in?(['all', :all])
+        all(:conditions => ["start_time <= ? and
+                             end_time >= ? and
+                             variety = 'Sick Days'",
+                            Date.today.beginning_of_year,
+                            Date.today.end_of_year],
+            :order => 'start_time ASC')
+
+      else
+        all(:conditions => ["start_time <= ? and
+                             end_time >= ? and
+                             variety = 'Sick Days' and
+                             status = ?",
+                            Date.today.beginning_of_year,
+                            Date.today.end_of_year,
+                            status],
+            :order => 'start_time ASC')
+      end
+    end
+
     # named_scope equivalents (seems standard for rails 3)
     def current
       all(:conditions => ['start_time < ? and end_time > ?', Time.now, Time.now], :order => "start_time ASC")
@@ -50,6 +91,19 @@ class User < ActiveRecord::Base
 
   def present?
     !absent?
+  end
+
+  def set_days(save_results=false)
+    # this years holidays
+    holidays = absences.holiday_this_year('Approved').collect{|x| x.days }.sum
+    sick_days = absences.sick_days_this_year('Approved').collect{|x| x.days }.sum
+    if save_results
+      update_attributes(:holiday_remaining => holiday_allowance - holidays,
+                        :sick_days_remaining => sick_day_allowance - sick_days)
+    else
+      holiday_remaining   = holiday_allowance - holidays
+      sick_days_remaining = sick_day_allowance - sick_days
+    end
   end
 
 end
