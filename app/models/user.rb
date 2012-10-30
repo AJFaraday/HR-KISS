@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
 
     # named_scope equivalents (seems standard for rails 3)
     def current
-      all(:conditions => ['start_time < ? and end_time > ?', Time.now, Time.now], :order => "start_time ASC")
+      all(:conditions => ['start_time <= ? and end_time >= ?', Time.now, Time.now], :order => "start_time ASC")
     end
 
     def past
@@ -103,8 +103,8 @@ class User < ActiveRecord::Base
       update_attributes(:holiday_remaining => holiday_allowance - holidays,
                         :sick_days_remaining => sick_day_allowance - sick_days)
     else
-      holiday_remaining   = holiday_allowance - holidays
-      sick_days_remaining = sick_day_allowance - sick_days
+      self.holiday_remaining   = holiday_allowance - holidays
+      self.sick_days_remaining = sick_day_allowance - sick_days
     end
   end
 

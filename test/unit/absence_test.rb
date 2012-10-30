@@ -139,4 +139,27 @@ class AbsenceTest < ActiveSupport::TestCase
     assert @absence.errors[:base].include?("You can not start your absence after you end your absence.")
   end
 
+  def test_set_days_sick_days
+    @user = FactoryGirl.create(:user)
+    assert_equal 20, @user.sick_day_allowance
+    assert_equal 20, @user.sick_days_remaining
+    absence = FactoryGirl.create(:sick_day,
+                                 :start_time => Date.commercial(Date.today.year, 1-Date.today.cweek, 1) + 1.day,
+                                 :end_time => Date.commercial(Date.today.year, 1-Date.today.cweek, 1) + 2.days,
+                                 :user => @user)
+    assert_equal 18, absence.user.sick_days_remaining
+  end
+
+  def test_set_days_holidays
+    @user = FactoryGirl.create(:user)
+    assert_equal 20, @user.holiday_allowance
+    assert_equal 20, @user.holiday_remaining
+    absence = FactoryGirl.create(:absence,
+                                 :start_time => Date.commercial(Date.today.year, 2-Date.today.cweek, 1) + 1.day,
+                                 :single_day => true,
+                                 :start_half_day => 'Morning',
+                                 :user => @user)
+    assert_equal 19.5, absence.user.holiday_remaining
+  end
+
 end

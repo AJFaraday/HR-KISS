@@ -22,8 +22,10 @@ class Absence < ActiveRecord::Base
   validate :validate_start_is_before_end
   validate :no_sick_days_in_advance
   validate :set_status
+  # TODO validate :no_overlapping_absences
 
   before_save :set_days
+  after_save :set_user_days
 
   # validations
   def set_start_time
@@ -158,6 +160,10 @@ class Absence < ActiveRecord::Base
 
   def set_days
     self.days = get_days
+  end
+
+  def set_user_days
+    user.set_days(true)
   end
 
   def set_single_day
