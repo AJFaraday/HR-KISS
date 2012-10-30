@@ -61,7 +61,7 @@ class HrFormBuilder < ActionView::Helpers::FormBuilder
         label_name = field_name
       end
 
-
+      args.first.delete(:append) if !append.blank?
       args.first.delete(:prepend) if !prepend.blank?
       args.first.delete(:description) if !append.blank?
       args.first.delete(:skip_label) if !skip_label.blank?
