@@ -1,7 +1,10 @@
 class AbsencesController < ApplicationController
 
   before_filter :require_user
-  before_filter :require_admin_user, :only => [:edit, :update]
+  # TODO check when an admin user is required (after acceptance?)
+  #before_filter :require_admin_user
+
+  before_filter :get_absence, :only => [:show, :edit, :update]
 
   def index
     if current_user.is_admin?
@@ -28,6 +31,22 @@ class AbsencesController < ApplicationController
   end
 
   def show
+  end
+
+  def edit
+
+  end
+
+  def update
+    if @absence.update_attributes(params[:absence])
+      flash[:notice] = "Absence updated!"
+      redirect_to absence_path(@absence)
+    else
+      render :action => :edit
+    end
+  end
+
+  def get_absence
     @absence = Absence.find(params[:id])
   end
 

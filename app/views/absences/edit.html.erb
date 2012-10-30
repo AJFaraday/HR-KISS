@@ -1,0 +1,10 @@
+<h1>Edit Absence: <%= @absence.show_time %></h1>
+
+<% hr_form_for @absence do |f| %>
+  <%= render :partial => 'form', :object => f, :locals => { :user => @absence } %>
+  <%= f.submit "Edit" %>
+<% end %>
+
+<% content_for :menu do %>
+  <%= menu_items(absence_menu(@absence)) %>
+<% end %>

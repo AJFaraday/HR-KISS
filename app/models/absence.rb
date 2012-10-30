@@ -122,7 +122,7 @@ class Absence < ActiveRecord::Base
   end
 
   def show_time
-    "#{start_time.strftime('%d-%m-%Y')} to #{end_time.strftime('%d-%m-%Y')}"
+    "#{self.start_time.strftime('%d-%m-%Y')} to #{self.end_time.strftime('%d-%m-%Y')}"
   end
 
   def get_days
