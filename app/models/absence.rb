@@ -15,6 +15,7 @@ class Absence < ActiveRecord::Base
 
   validates_presence_of :reason
   validates_presence_of :variety
+  validates_presence_of :user
 
   validate :set_start_time
   validate :set_end_time
@@ -27,9 +28,8 @@ class Absence < ActiveRecord::Base
   # validations
   def set_start_time
     if self.start_time and self.start_time.is_a?(Time)
-      single_day = start_time.to_date == end_time.to_date unless single_day and single_day == '1'
-      if single_day and (single_day == '1' or single_day == true)
-        self.end_time = self.start_time
+      set_single_day
+      if self.single_day and self.single_day.in?([true,'1'])
         case start_half_day
           when "Full Day"
             self.start_time = self.start_time.change(:hour => 9)
@@ -52,8 +52,9 @@ class Absence < ActiveRecord::Base
 
   def set_end_time
     if self.end_time and self.end_time.is_a?(Time)
-      single_day = (start_time.to_date == self.end_time.to_date) unless single_day and single_day == '1'
-      if single_day and (single_day == '1' or single_day == true)
+      set_single_day
+      if self.single_day and (self.single_day == '1' or self.single_day == true)
+        self.end_time = self.start_time
         case start_half_day
           when "Full Day"
             self.end_time = self.end_time.change(:hour => 17)
@@ -117,21 +118,30 @@ class Absence < ActiveRecord::Base
   end
 
   def get_days
+    set_single_day
     if self.valid?
-      day = start_time.to_date
-      count = 0.0
-      if start_time.hour == 13
-        count += 0.5 if day.workday?
-        day += 1.day
-      end
-      until day >= end_time.to_date do
-        count += 1.0 if day.workday?
-        day = day + 1.day
-      end
-      if end_time.hour == 13
-        count += 0.5 if day.workday?
+      if single_day
+        if 13.in?([start_time.hour, end_time.hour])
+          count = 0.5
+        else
+          count = 1
+        end
       else
-        count += 1 if day.workday?
+        day = start_time.to_date
+        count = 0.0
+        if start_time.hour == 13
+          count += 0.5 if day.workday?
+          day += 1.day
+        end
+        until day >= end_time.to_date do
+          count += 1.0 if day.workday?
+          day = day + 1.day
+        end
+        if end_time.hour == 13
+          count += 0.5 if day.workday?
+        else
+          count += 1 if day.workday? and day != start_time.to_date
+        end
       end
       return count
     else
@@ -144,6 +154,11 @@ class Absence < ActiveRecord::Base
     self.days = get_days
   end
 
+  def set_single_day
+    self.single_day = (start_time.to_date == self.end_time.to_date) unless self.single_day and self.single_day.in?([true,'1'])
+  end
+
 end
+
 
 
