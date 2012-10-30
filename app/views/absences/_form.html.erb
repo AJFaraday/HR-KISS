@@ -36,8 +36,8 @@
     $( "#absence_start_time" ).datepicker(<%= date_picker_options %>);
     $( "#absence_long_start_time" ).datepicker(<%= date_picker_options %>);
     $( "#absence_end_time" ).datepicker(<%= date_picker_options %>);
-    if (!$())
   });
+
 
   function switchTimeStyle(){
     $('#short_hol_form').toggle();
@@ -47,7 +47,7 @@
     $('select[name=placeholder]').attr('name','absence[start_half_day]')
 
   }
-  if ($('#absence_single_day')[0].checked){
+  if ($('#absence_single_day').checked){
     $('#short_hol_form').show();
     $('#long_hol_form').hide();
     $('#long_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');
