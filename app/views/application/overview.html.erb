@@ -12,51 +12,5 @@
   <h1>Flex Time</h1>
 </div>
 <div class='box_right'>
-  <h1>Absences</h1>
-  <div class='box_menu'>
-    <%= link_to 'Book Absence', new_absence_path %>
-    <%= link_to 'Absence Archive', absences_path %>
-  </div>
-  <h3>Your upcoming holidays</h3>
-  <% absences = current_user.absences.future('Approved') %>
-  <table class='box_report'>
-    <thead>
-      <tr>
-        <% ['Variety','Dates','Days','Resason'].each do |header| %>
-          <th><%= header %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <% absences.each do |absence| %>
-        <tr>
-          <td><%= absence.variety %></td>
-          <td><%= absence.show_times %></td>
-          <td><%= absence.days %></td>
-          <td><%= absence.reason %></td>
-        </tr>
-      <% end  %>
-    </tbody>
-  </table>
-  <h3>Your pending holidays</h3>
-  <% absences = current_user.absences.all(:conditions => ["status = 'Pending'"]) %>
-  <table class='box_report'>
-    <thead>
-      <tr>
-        <% ['Variety','Dates','Days','Resason'].each do |header| %>
-          <th><%= header %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <% absences.each do |absence| %>
-        <tr>
-          <td><%= absence.variety %></td>
-          <td><%= link_to absence.show_times(true), absence_path(absence) %></td>
-          <td><%= absence.days %></td>
-          <td><%= absence.reason %></td>
-        </tr>
-      <% end  %>
-    </tbody>
-  </table>
+  <%= render :partial => 'absence_overview' %>
 </div>

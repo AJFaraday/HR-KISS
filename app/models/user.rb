@@ -89,7 +89,8 @@ class User < ActiveRecord::Base
 
   def absences_to_approve
     user_ids = self.subordinates.collect { |u| u.id }
-    Absence.all(:conditions => ['user_id in (?) and status = "Pending"', user_ids])
+    Absence.all(:conditions => ['user_id in (?) and status = "Pending"', user_ids],
+                :order => 'start_time ASC')
   end
 
   def is_admin?

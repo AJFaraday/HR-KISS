@@ -1,0 +1,83 @@
+<h1>Absences</h1>
+<div class='box_menu'>
+  <%= link_to 'Book Absence', new_absence_path %>
+  <%= link_to 'Absences', absences_path %>
+</div>
+
+<% if current_user.is_admin? %>
+    <% if current_user.absences_to_approve.any? %>
+        <h4 style="color:red;">Holidays for your approval</h4>
+        <table class='box_report'>
+          <thead>
+            <tr>
+              <% ['User', 'Dates', 'Days', 'Resason'].each do |header| %>
+                <th><%= header %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% current_user.absences_to_approve.each do |absence| %>
+              <tr>
+                <td><%= link_to absence.user.name, absence_path(absence) %></td>
+                <td><%= absence.show_times(true) %></td>
+                <td><%= absence.days %></td>
+                <td><%= absence.reason %></td>
+              </tr>
+              <tr>
+                <td colspan=2><%= image_tag 'approve_button.png'%></td>
+                <td colspan=2><%= image_tag 'decline_button.png'%></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+    <% end %>
+<% end %>
+
+<h4>Your upcoming holidays</h4>
+<% upcoming = current_user.absences.future('Approved') %>
+<% if upcoming.any? %>
+    <table class='box_report'>
+      <thead>
+      <tr>
+        <% ['Dates', 'Days', 'Resason'].each do |header| %>
+            <th><%= header %></th>
+        <% end %>
+      </tr>
+      </thead>
+      <tbody>
+      <% upcoming.each do |absence| %>
+          <tr>
+            <td><%= link_to absence.show_times(true), absence_path(absence) %></td>
+            <td><%= absence.days %></td>
+            <td><%= absence.reason %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+<% else %>
+    <p>You have no approved future holidays</p>
+<% end %>
+<h4>Your pending holidays</h4>
+<% pending = current_user.absences.all(:conditions => ["status = 'Pending'"]) %>
+<% if pending.any? %>
+    <table class='box_report'>
+      <thead>
+      <tr>
+        <% ['Dates', 'Days', 'Resason'].each do |header| %>
+            <th><%= header %></th>
+        <% end %>
+      </tr>
+      </thead>
+      <tbody>
+      <% absences.each do |absence| %>
+          <tr>
+            <td><%= link_to absence.show_times(true), absence_path(absence) %></td>
+            <td><%= absence.days %></td>
+            <td><%= absence.reason %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+<% else %>
+    <p>You have no holidays currently pending approval.</p>
+<% end %>

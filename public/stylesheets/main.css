@@ -60,3 +60,11 @@ label {
   width: 48%;
   border:  solid 2px black;
 }
+
+.box_report {
+  font-align: center;
+}
+
+table.box_report tbody tr td {
+  text-align: center;
+}
