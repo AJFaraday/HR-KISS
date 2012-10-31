@@ -47,7 +47,7 @@
     $('select[name=placeholder]').attr('name','absence[start_half_day]')
 
   }
-  if ($('#absence_single_day').checked){
+  if ($('#absence_single_day').attr('checked')){
     $('#short_hol_form').show();
     $('#long_hol_form').hide();
     $('#long_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');

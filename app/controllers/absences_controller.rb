@@ -34,7 +34,7 @@ class AbsencesController < ApplicationController
   end
 
   def edit
-
+    @absence.set_single_day
   end
 
   def update
