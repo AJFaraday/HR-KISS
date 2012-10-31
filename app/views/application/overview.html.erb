@@ -7,6 +7,9 @@
   <% end %>
   <p>You have <b><%= current_user.sick_days_remaining %>/<%= current_user.sick_day_allowance %></b> days of holiday left, this year.</p>
   <p>Your line manager is <b><%= current_user.line_manager.name  %></b>.</p>
+  <% if current_user == current_user.line_manager %>
+    <p>You are your own line manager. You may wish to rectify this situation.</p>
+  <% end %>
 </div>
 <div class='box_left'>
   <h1>Flex Time</h1>
