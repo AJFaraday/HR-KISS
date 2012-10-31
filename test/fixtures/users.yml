@@ -5,7 +5,7 @@ admin:
   created_at:
   crypted_password: e5ed494000f6e0af5f9007302d462016d83f1f1298fdf1f2d7b39fb279007ccc0cb4566cfea2d3578aa734c4a77e35bc8d934151e4461441b665176fcb9e7488
   updated_at:
-  sick_day_allowance:
+  sick_day_allowance: 20
   sick_days_remaining: 20
   admin: 1
   id: 5
