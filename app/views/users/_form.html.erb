@@ -2,10 +2,12 @@
 
 <%= form.text_field :login %>
 <%= form.text_field :name %>
+<%= form.text_field :email%>
 <%= form.password_field :password %>
 <%= form.password_field :password_confirmation %>
 <%= form.select :line_manager_id, User.find_all_by_admin(true).collect{|x| [x.name,x.id]} %>
 <% if current_user.is_admin? %>
   <%= form.text_field :holiday_allowance %>
+  <%= form.text_field :sick_day_allowance %>
   <%= form.js_check_box :admin %>
 <% end %>

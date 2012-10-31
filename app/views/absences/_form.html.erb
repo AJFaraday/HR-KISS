@@ -2,6 +2,8 @@
 
 <%= form.select :user_id, User.all(:order => 'name ASC').collect{|u| [u.name,u.id]} if current_user.is_admin? %>
 
+<%= form.select :variety, ['Holiday','Sick Days'] %>
+
 <%= form.js_check_box :single_day, :on_click => 'switchTimeStyle();' %>
 
 <div id='short_hol_form' style='display:none;'>
@@ -20,7 +22,6 @@
                        :append=> form.select(:end_half_day, ['Full Day','Lunch Time'],
                                              :skip_label => true)  %>
 </div>
-<%= form.select :variety, ['Holiday','Sick Days'] %>
 <%= form.text_area :reason, :rows => 3 %>
 <% if current_user.is_admin? %>
   <%= form.select :status, ['Approved','Declined','Pending'] %>
@@ -30,7 +31,7 @@
 
 
 <script type='text/javascript'>
-  <% date_picker_options = "{ dateFormat: 'dd/mm/yy', autoSize: true, changeMonth: true, changeYear: true,
+  <% date_picker_options = "{ dateFormat: 'dd-mm-yy', autoSize: true, changeMonth: true, changeYear: true,
                               firstDay: 1, minDate: '-1y', maxDate: '+1y', numberOfMonths: 2 }" %>
   $(function() {
     $( "#absence_start_time" ).datepicker(<%= date_picker_options %>);
@@ -45,16 +46,21 @@
     $('select[name=not_start_half_day]').attr('name','placeholder');
     $('select[name="absence[start_half_day]"]').attr('name','not_start_half_day')
     $('select[name=placeholder]').attr('name','absence[start_half_day]')
-
+      
+    $('input[name=not_start_time]').attr('name','placeholder');
+    $('input[name="absence[start_time]"]').attr('name','not_start_time')
+    $('input[name=placeholder]').attr('name','absence[start_time]')
   }
   if ($('#absence_single_day').attr('checked')){
     $('#short_hol_form').show();
     $('#long_hol_form').hide();
     $('#long_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');
+    $('#long_hol_form p:nth-child(1) #absence_long_start_time').attr('name', 'not_start_time');
   }
   else {
     $('#short_hol_form').hide();
     $('#short_hol_form p:nth-child(1) select#absence_start_half_day').attr('name', 'not_start_half_day');
+    $('#short_hol_form p:nth-child(1) #absence_start_time').attr('name', 'not_start_time');
     $('#long_hol_form').show();
   }
 </script>

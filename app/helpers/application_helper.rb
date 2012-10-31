@@ -10,6 +10,17 @@ module ApplicationHelper
 HTML
   end
 
+  def attribute_display(object,attribute)
+    value = object.send(attribute)
+    if value.is_a?(TrueClass) or value.is_a?(FalseClass)
+      value = show_boolean(value)
+    end
+    if [Date, Time, DateTime].any?{|x| value.is_a? x}
+      value = value.strftime('%d-%m-%Y %I:%M%p')
+    end
+    return value
+  end
+
   def show_exact(label, value)
     return raw <<HTML
 <p>
@@ -19,13 +30,6 @@ HTML
 HTML
   end
 
-  def attribute_display(object,attribute)
-    value = object.send(attribute)
-    if value.is_a?(TrueClass) or value.is_a?(FalseClass)
-      value = show_boolean(value)
-    end
-    return value
-  end
 
   def show_boolean(value, opts={})
     opts[:true_image] ? true_image = opts[:true_image] : true_image = '/images/tick.png'

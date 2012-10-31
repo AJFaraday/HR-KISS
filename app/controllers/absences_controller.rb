@@ -8,9 +8,9 @@ class AbsencesController < ApplicationController
 
   def index
     if current_user.is_admin?
-      @absences = Absence.all # TODO limit to future, add parameters for archive
+      @absences = Absence.all(:order => 'start_time ASC')
     else
-      @absences = current_user.absences
+      @absences = current_user.absences(:order => 'start_time ASC')
     end
   end
 
@@ -21,9 +21,9 @@ class AbsencesController < ApplicationController
 
   def create
     @absence = Absence.new(params[:absence])
-    @absence.status ||= 'Pending'
     if @absence.save
-      flash[:notice] = "Your #{@absence.variety} has been requested."
+      flash[:notice] = "Your #{@absence.variety} has been requested. "
+      flash[:notice] << 'Currently awaiting approval by your line manager.' if @absence.status == 'Pending'
       redirect_to absence_path(@absence)
     else
       render :new

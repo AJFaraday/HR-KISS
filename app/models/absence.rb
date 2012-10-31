@@ -53,7 +53,7 @@ class Absence < ActiveRecord::Base
   end
 
   def set_end_time
-    if self.end_time and self.end_time.is_a?(Time)
+    if (self.end_time and self.end_time.is_a?(Time)) or ['1',true].any?{|x| single_day == x}
       set_single_day
       if self.single_day and (self.single_day == '1' or self.single_day == true)
         self.end_time = self.start_time
@@ -104,25 +104,44 @@ class Absence < ActiveRecord::Base
   end
 
   # named_scope equivalents (seems standard for rails 3)
-  def current
-    all(:conditions => ['start_time < ? and end_time > ?', Time.now, Time.now], :order => "start_time ASC")
+  def current(status = nil)
+    if status
+      all(:conditions => ['start_time < ? and end_time > ? and status = ?',
+                          Time.now, Time.now, status], :order => "start_time ASC")
+    else
+      all(:conditions => ['start_time < ? and end_time > ?', Time.now, Time.now], :order => "start_time ASC")
+    end
+
   end
 
-  def past
-    all(:conditions => ['end_time < ?', Time.now], :order => "start_time ASC")
+  def past(status=nil)
+    if status
+      all(:conditions => ['end_time < ? and status = ?', Time.now, status], :order => "start_time ASC")
+    else
+      all(:conditions => ['end_time < ?', Time.now], :order => "start_time ASC")
+    end
   end
 
-  def future
-    all(:conditions => ['start_time > ?', Time.now], :order => "start_time ASC")
+  def future(status=nil)
+    if status
+      all(:conditions => ['start_time > ? and status = ?', Time.now, status], :order => "start_time ASC")
+    else
+      all(:conditions => ['start_time > ?', Time.now], :order => "start_time ASC")
+    end
   end
 
   # presentation methods
   def to_s
-    "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%Y')} to #{end_time.strftime('%d-%m-%Y')}"
+    "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%C')} to #{end_time.strftime('%d-%m-%C')}"
   end
 
-  def show_time
-    "#{self.start_time.strftime('%d-%m-%Y')} to #{self.end_time.strftime('%d-%m-%Y')}"
+  def show_times(line_breaks = false)
+    if line_breaks
+      display = "#{self.start_time.strftime('%d-%m-%Y %I:%M%p')}<br/>to<br/>#{self.end_time.strftime('%d-%m-%Y %I:%M%p')}"
+    else
+      display = "#{self.start_time.strftime('%d-%m-%Y %I:%M%p')} to #{self.end_time.strftime('%d-%m-%Y %I:%M%p')}"
+    end
+    return ActiveSupport::SafeBuffer.new(display)
   end
 
   def get_days

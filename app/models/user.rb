@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
     auth.login_field = "login"
   end
 
-  has_many :absences do
+  has_many :absences, :dependent => :destroy do
 
     def holidays_this_year(status=:all)
       if status.in?(['all', :all])
@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
                              variety = 'Holiday'",
                             Date.today.beginning_of_year,
                             Date.today.end_of_year],
-        :order => 'start_time ASC')
+            :order => 'start_time ASC')
       else
         all(:conditions => ["start_time >= ? and
                              end_time <= ? and
@@ -58,18 +58,38 @@ class User < ActiveRecord::Base
     end
 
     # named_scope equivalents (seems standard for rails 3)
-    def current
-      all(:conditions => ['start_time <= ? and end_time >= ?', Time.now, Time.now], :order => "start_time ASC")
+    def current(status = nil)
+      if status
+        all(:conditions => ['start_time < ? and end_time > ? and status = ?',
+                            Time.now, Time.now, status], :order => "start_time ASC")
+      else
+        all(:conditions => ['start_time < ? and end_time > ?', Time.now, Time.now], :order => "start_time ASC")
+      end
+
     end
 
-    def past
-      all(:conditions => ['end_time < ?', Time.now], :order => "start_time ASC")
+    def past(status=nil)
+      if status
+        all(:conditions => ['end_time < ? and status = ?', Time.now, status], :order => "start_time ASC")
+      else
+        all(:conditions => ['end_time < ?', Time.now], :order => "start_time ASC")
+      end
     end
 
-    def future
-      all(:conditions => ['start_time > ?', Time.now], :order => "start_time ASC")
+    def future(status=nil)
+      if status
+        all(:conditions => ['start_time > ? and status = ?', Time.now, status], :order => "start_time ASC")
+      else
+        all(:conditions => ['start_time > ?', Time.now], :order => "start_time ASC")
+      end
     end
 
+
+  end
+
+  def absences_to_approve
+    user_ids = self.subordinates.collect { |u| u.id }
+    Absence.all(:conditions => ['user_id in (?) and status = "Pending"', user_ids])
   end
 
   def is_admin?
@@ -97,13 +117,13 @@ class User < ActiveRecord::Base
 
   def set_days(save_results=false)
     # this years holidays
-    holidays = absences.holidays_this_year('Approved').collect{|x| x.days }.sum
-    sick_days = absences.sick_days_this_year('Approved').collect{|x| x.days }.sum
+    holidays = absences.holidays_this_year('Approved').collect { |x| x.days }.sum
+    sick_days = absences.sick_days_this_year('Approved').collect { |x| x.days }.sum
     if save_results
       update_attributes(:holiday_remaining => holiday_allowance - holidays,
                         :sick_days_remaining => sick_day_allowance - sick_days)
     else
-      self.holiday_remaining   = holiday_allowance - holidays
+      self.holiday_remaining = holiday_allowance - holidays
       self.sick_days_remaining = sick_day_allowance - sick_days
     end
   end

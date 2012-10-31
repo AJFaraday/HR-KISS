@@ -41,3 +41,22 @@ label {
 .field_with_errors{
   background-color:#ff5555;
 }
+
+.box_full {
+  width: 100%;
+  border:  solid 2px black;
+}
+
+.box_left {
+  position: relative;
+  float: left;
+  width: 48%;
+  border:  solid 2px black;
+}
+
+.box_right {
+  position: relative;
+  float: right;
+  width: 48%;
+  border:  solid 2px black;
+}

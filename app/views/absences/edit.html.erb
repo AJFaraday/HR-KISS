@@ -1,4 +1,4 @@
-<h1>Edit Absence: <%= @absence.show_time %></h1>
+<h1>Edit Absence: <%= @absence.show_times %></h1>
 
 <% hr_form_for @absence do |f| %>
   <%= render :partial => 'form', :object => f, :locals => { :user => @absence } %>

@@ -1,4 +1,62 @@
-<h1>HR Overview</h1>
-<p>You are logged in <%= "as an admin" if current_user.is_admin? %>.</p>
-<p>You have <%= current_user.holiday_allowance %> days of holiday this year.</p>
-<p>You have <%= current_user.holiday_remaining %> days of holiday left, this year.</p>
+<div class='box_full'>
+  <h1>HR Overview</h1>
+  <p>You are logged in as <b><%= current_user.name %><%= "(admin)" if current_user.is_admin? %></b>.</p>
+  <p>You have <b><%= current_user.holiday_remaining %>/<%= current_user.holiday_allowance %></b> days of holiday this year.</p>
+  <% if current_user.absences.holidays_this_year('Pending').any? %>
+    <p>You have <b><%= current_user.absences.holidays_this_year('Pending').collect{|x| x.days}.sum %></b> days of holiday pending your line managers approval.</p>
+  <% end %>
+  <p>You have <b><%= current_user.sick_days_remaining %>/<%= current_user.sick_day_allowance %></b> days of holiday left, this year.</p>
+  <p>Your line manager is <b><%= current_user.line_manager.name  %></b>.</p>
+</div>
+<div class='box_left'>
+  <h1>Flex Time</h1>
+</div>
+<div class='box_right'>
+  <h1>Absences</h1>
+  <div class='box_menu'>
+    <%= link_to 'Book Absence', new_absence_path %>
+    <%= link_to 'Absence Archive', absences_path %>
+  </div>
+  <h3>Your upcoming holidays</h3>
+  <% absences = current_user.absences.future('Approved') %>
+  <table class='box_report'>
+    <thead>
+      <tr>
+        <% ['Variety','Dates','Days','Resason'].each do |header| %>
+          <th><%= header %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% absences.each do |absence| %>
+        <tr>
+          <td><%= absence.variety %></td>
+          <td><%= absence.show_times %></td>
+          <td><%= absence.days %></td>
+          <td><%= absence.reason %></td>
+        </tr>
+      <% end  %>
+    </tbody>
+  </table>
+  <h3>Your pending holidays</h3>
+  <% absences = current_user.absences.all(:conditions => ["status = 'Pending'"]) %>
+  <table class='box_report'>
+    <thead>
+      <tr>
+        <% ['Variety','Dates','Days','Resason'].each do |header| %>
+          <th><%= header %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% absences.each do |absence| %>
+        <tr>
+          <td><%= absence.variety %></td>
+          <td><%= link_to absence.show_times(true), absence_path(absence) %></td>
+          <td><%= absence.days %></td>
+          <td><%= absence.reason %></td>
+        </tr>
+      <% end  %>
+    </tbody>
+  </table>
+</div>
