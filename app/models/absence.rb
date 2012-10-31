@@ -189,6 +189,26 @@ class Absence < ActiveRecord::Base
     self.single_day = (start_time.to_date == self.end_time.to_date) unless self.single_day and self.single_day.in?([true,'1'])
   end
 
+  def decline_confirm_message
+    "Are you sure you want to decline this holiday request?"
+  end
+
+  def approve_confirm_message
+    if end_time.year == Date.today.year and start_time.year == Date.today.year
+      remaining = self.user.holiday_remaining - self.days
+      if remaining >= 0
+        "This #{days} day holiday will leave #{user.name} with #{remaining} days of holiday this year.\r\n
+Are you sure you want to approve this holiday?"
+      else
+        "This #{days} day holiday will leave #{user.name} #{remaining * -1} days OVER their holiday allowance.\r\n
+Are you sure you want to approve this holiday?"
+      end
+    else
+      "This holiday will take #{days} days from #{user.name} in #{start_time.year}.\r\n
+Are you sure you want to approve this holiday?"
+    end
+  end
+
 end
 
 

@@ -7,7 +7,12 @@ HRKISS::Application.routes.draw do
   resources :users
   resources :user_sessions
 
-  resources :absences
+  resources :absences do
+    member do
+      post 'approve'
+      post 'decline'
+    end
+  end
 
   root :to => 'application#index'
 
