@@ -1,10 +1,9 @@
 class AbsencesController < ApplicationController
 
   before_filter :require_user
-  # TODO check when an admin user is required (after acceptance?)
-  #before_filter :require_admin_user
+  before_filter :require_admin_user, :only => [:approve, :decline]
 
-  before_filter :get_absence, :only => [:show, :edit, :update]
+  before_filter :get_absence, :only => [:show, :edit, :update, :approve, :decline]
 
   def index
     if current_user.is_admin?
@@ -44,6 +43,28 @@ class AbsencesController < ApplicationController
     else
       render :action => :edit
     end
+  end
+
+  def approve
+    if current_user == @absence.line_manager
+      @absence.update_attribute :status, 'Approved'
+      flash[:notice] = "You have approved #{@absence}."
+    else
+      flash[:error] = "You can not approve absences for #{@absence.user.name} as you are not their line manager.<br/>
+Please contact #{@absence.user.line_manager.name}."
+    end
+    redirect_to absence_path(@absence)
+  end
+
+  def decline
+    if current_user == @absence.line_manager
+      @absence.update_attribute :status, 'Declined'
+      flash[:notice] = "You have declined #{@absence}."
+    else
+      flash[:error] = "You can not decline absences for #{@absence.user.name} as you are not their line manager.<br/>
+Please contact #{@absence.user.line_manager.name}."
+    end
+    redirect_to absence_path(@absence)
   end
 
   def get_absence

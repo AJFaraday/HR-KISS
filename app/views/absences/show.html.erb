@@ -7,6 +7,15 @@
 <%= show_attribute @absence, 'reason' %>
 <%= show_attribute @absence, 'status' %>
 
+<% if @absence.status == 'Pending' and current_user == @absence.line_manager %>
+  <%= link_to image_tag('approve_button.png'),
+              approve_absence_path(@absence),
+              :confirm => @absence.approve_confirm_message %>
+  <%= link_to image_tag('decline_button.png'),
+              decline_absence_path(@absence),
+              :confirm => @absence.decline_confirm_message %>
+<% end %>
+
 <% content_for :menu do %>
   <%= menu_items(absence_menu(@absence)) %>
 <% end %>

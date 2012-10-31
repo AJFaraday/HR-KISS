@@ -8,6 +8,8 @@ class Absence < ActiveRecord::Base
 
   belongs_to :user
 
+  delegate :line_manager, :to => :user
+
   # accessors used to produce start and end time
   attr_accessor :start_half_day
   attr_accessor :end_half_day

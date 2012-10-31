@@ -129,4 +129,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def holiday_numbers
+    "#{holiday_remaining}/#{holiday_allowance}"
+  end
+
+  def sick_day_numbers
+    "#{sick_days_remaining}/#{sick_day_allowance}"
+  end
+
 end

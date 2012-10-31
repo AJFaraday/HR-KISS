@@ -9,8 +9,8 @@ HRKISS::Application.routes.draw do
 
   resources :absences do
     member do
-      post 'approve'
-      post 'decline'
+      get 'approve'
+      get 'decline'
     end
   end
 

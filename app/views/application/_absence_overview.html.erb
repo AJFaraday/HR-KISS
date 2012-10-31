@@ -77,7 +77,7 @@
       </tr>
       </thead>
       <tbody>
-      <% absences.each do |absence| %>
+      <% pending.each do |absence| %>
           <tr>
             <td><%= link_to absence.show_times(true), absence_path(absence) %></td>
             <td><%= absence.days %></td>
