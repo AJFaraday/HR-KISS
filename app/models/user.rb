@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
 
   end
 
+
   acts_as_authentic do |auth|
     auth.login_field = "login"
   end
@@ -164,6 +165,10 @@ class User < ActiveRecord::Base
     else
       '0:00'
     end
+  end
+
+  def flex(position)
+    self.flexes.find_by_position position
   end
 
 end

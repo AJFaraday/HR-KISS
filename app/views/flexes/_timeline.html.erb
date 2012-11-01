@@ -4,18 +4,22 @@
       <th></th>
       <th>Time</th>
       <th>Total</th>
-      <th>Comment</th>
+      <th style='width:150px;'>Comment</th>
       <th></th>
     </tr>
   </thead>
   <tbody class='current'>
     <% @flexes.each do |flex| %>
-      <tr>
+      <tr <%= "class='strike'" if flex.discarded %> >
         <td><%= flex.position %></td>
         <td><%= raw flex.show_time %></td>
         <td><%= raw flex.show_total_time %></td>
         <td><%= flex.comment%></td>
-        <td><%# TODO actions (discard/restore) %></td>
+        <% if flex.discarded %>
+          <td><%= link_to image_tag('/images/restore_button.png'), restore_flex_path(flex, :back_action => back_action)  %></td>
+        <% else %>
+          <td><%= link_to image_tag('/images/discard_button.png'), discard_flex_path(flex, :back_action => back_action)  %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

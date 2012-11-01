@@ -77,3 +77,14 @@ table.timeline{
 table.timeline tbody.current tr td {
   text-align: center;
 }
+
+table.timeline tbody.current tr td img {
+  text-align: center;
+  vertical-align:middle;
+}
+
+
+table.timeline tbody.current tr.strike{
+  text-decoration:line-through;
+
+}

@@ -35,11 +35,23 @@ class FlexesController < ApplicationController
   end
 
   def discard
-
+    @flex.update_attribute :discarded, true
+    flash[:notice] = "You've chucked out that flex."
+    if params[:back_action] == 'application/overview'
+      redirect_to root_path()
+    else
+      redirect_to flexes_path(:user_id => @flex.user.id)
+    end
   end
 
   def restore
-
+    @flex.update_attribute :discarded, false
+    flash[:notice] = "You've restored that flex."
+    if params[:back_action] == 'application/overview'
+      redirect_to root_path()
+    else
+      redirect_to flexes_path(:user_id => @flex.user.id)
+    end
   end
 
   def get_flex
