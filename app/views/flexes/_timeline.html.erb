@@ -1,4 +1,11 @@
-<table class=timeline>
+<% if current_user.is_admin? %>
+  See flex time timeline for:
+  <%= select_tag :user,
+                 options_for_select(User.all.collect{|u| [u.name, u.id] },
+                                    :selected => (@user ? @user.id : current_user.id )),
+                 :onchange => "window.location = '/flexes/?user_id=' + $('#user option:selected').attr('value');" %>
+<% end %>
+<table class='timeline' >
   <thead>
     <tr>
       <th></th>

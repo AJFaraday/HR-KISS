@@ -15,7 +15,7 @@ class Flex < ActiveRecord::Base
   after_initialize :set_initial_columns
   before_save :minutes_to_hours
   before_save :set_totals
-  after_save :cascade_totals_if_discarded
+  after_save :cascade_totals
 
   def set_initial_columns
     if self.new_record?
@@ -87,14 +87,14 @@ class Flex < ActiveRecord::Base
   end
 
   # When a flex is discarded (crossed out), all the later totals have to change
-  def cascade_totals_if_discarded
-    if self.discarded.in?([true,1,'1'])
+  def cascade_totals
+    #if self.discarded.in?([true,1,'1'])
       later_flexes = user.flexes.all(:conditions => ['position > ?', self.position],
                                      :order => 'position ASC')
       later_flexes.each do |flex|
         flex.save!
       end
-    end
+    #end
   end
 
   def last_position

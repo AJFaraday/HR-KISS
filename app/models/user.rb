@@ -171,4 +171,8 @@ class User < ActiveRecord::Base
     self.flexes.find_by_position position
   end
 
+  def to_s
+    self.name
+  end
+
 end

@@ -2,7 +2,7 @@
 <table class='overview'>
   <thead>
     <tr>
-      <% ['Login','Name','Email','Holidays','Sick Days','Admin'].each do |header| %>
+      <% ['Login','Name','Email','Holidays','Sick Days','Flex Time', 'Admin'].each do |header| %>
         <th><%=header%></th>
       <% end  %>
     </tr>
@@ -11,9 +11,11 @@
     <% @users.each do |user| %>
       <tr>
         <td><%= link_to user.login, user_path(user) %></td>
-        <% ['name','email','holiday_numbers','sick_day_numbers','admin'].each do |attribute| %>
+        <% ['name','email','holiday_numbers','sick_day_numbers'].each do |attribute| %>
           <td><%= attribute_display(user,attribute) %></td>
         <% end  %>
+        <td><%= link_to user.flex_time, flexes_path(:user_id => user.id) %></td>
+        <td><%= attribute_display(user,'admin')%></td>
       </tr>
     <% end %>
   </tbody>

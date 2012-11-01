@@ -15,6 +15,7 @@
       <%= menu_items([{:text => 'Home', :url => root_url},
                       {:text => 'My Profile', :url => user_path(current_user)},
                       {:text => 'Absences', :url => absences_path()},
+                      {:text => 'Flex Time Timeline', :url => flexes_path()},
                       {:text => 'Log out', :url => logout_url}]) %>
     <% else %><!-- No user logged in -->
       <%= menu_items([{:text => 'Home', :url => root_url}]) %>
