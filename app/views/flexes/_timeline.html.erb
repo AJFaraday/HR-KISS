@@ -1,0 +1,50 @@
+<table class=timeline>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Time</th>
+      <th>Total</th>
+      <th>Comment</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody class='current'>
+    <% @flexes.each do |flex| %>
+      <tr>
+        <td><%= flex.position %></td>
+        <td><%= flex.show_time %></td>
+        <td><%= flex.show_total_time %></td>
+        <td><%= flex.comment%></td>
+        <td><%# TODO actions (discard/restore)  %> %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tbody class=form>
+    <% if @flex.errors.any? %>
+      <tr style='background-color:red;'>
+        <td colspan=5>
+          <ul>
+            <% @flex.errors.full_messages.each do |error| %>
+              <li><%= error %></li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <% hr_form_for @flex do |form| %>
+        <%= form.hidden_field :user_id %>
+
+        <td colspan=3 height=30 >
+          <div style='float:left'><%= form.plusminus_check_box :positive %></div>
+          <div style='margin-top:3px;width:120px'>
+            <%= form.text_field :hours, :size => 2, :skip_label => true %>:<%= form.text_field :minutes, :size => 2, :skip_label => true %>
+          </div>
+        </td>
+        <td ><%= form.text_field :comment, :size => 20, :skip_label => true %></td>
+        <td><%= form.submit 'Record Flex' %></td>
+      <% end %>
+    </tr>
+  </tbody>
+
+</table>

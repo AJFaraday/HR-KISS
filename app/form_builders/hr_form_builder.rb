@@ -35,7 +35,9 @@ class HrFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def plusminus_check_box(field, opts={})
-    js_check_box field, opts.merge({:true_image => '/images/plus.png',  :false_image => '/images/minus.png'})
+    js_check_box field, opts.merge({:true_image => '/images/plus.png',
+                                    :false_image => '/images/minus.png',
+                                    :skip_label => true})
   end
 
   %w[date_select text_field password_field text_area select file_field datetime_select].each do |method_name|

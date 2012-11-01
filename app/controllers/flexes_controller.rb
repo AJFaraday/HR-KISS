@@ -1,6 +1,6 @@
 class FlexesController < ApplicationController
 
-  before_filter :get_flex
+  before_filter :get_flex, :only => [:discard, :restore]
   before_filter :require_user
 
   def index
@@ -9,11 +9,24 @@ class FlexesController < ApplicationController
     else
       @user = current_user
     end
+    @flex = @user.flexes.new
     @flexes = @user.flexes.for_timeline
   end
 
   def create
-
+    @flex = Flex.new(params[:flex])
+    @user = @flex.user
+    @flexes = @user.flexes.for_timeline
+    if @flex.save
+      if @user == current_user
+        flash[:notice] = "You've logged this flex on your timeline."
+      else
+        flash[:notice] = "You've logged this flex for #{@user.name}"
+      end
+    else
+      flash[:error] = "Something's wrong, this flex could not be logged.'"
+    end
+    render :index
   end
 
   def discard
@@ -25,9 +38,7 @@ class FlexesController < ApplicationController
   end
 
   def get_flex
-    if params[:id]
-      @flex = Flex.find params[:id]
-    end
+    @flex = Flex.find params[:id]
   end
 
 end
