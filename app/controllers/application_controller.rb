@@ -6,7 +6,11 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user, :require_admin_user
 
   def index
-    render :overview if current_user
+    if current_user
+      @flexes = current_user.flexes.for_timeline(5)
+      @flex = current_user.flexes.new
+      render :overview
+    end
   end
 
   def overview

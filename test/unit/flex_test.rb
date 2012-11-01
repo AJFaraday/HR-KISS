@@ -326,6 +326,51 @@ class FlexTest < ActiveSupport::TestCase
     assert_equal '0:55', @user.flex_time
   end
 
+  def test_minutes_then_hours
+    flex1 = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 5,
+                                :hours => 0,
+                                :positive => true)
+    flex2 = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 0,
+                                :hours => 1,
+                                :positive => false)
+    @user.reload
+
+    assert_equal 0, flex1.hours
+    assert_equal 5, flex1.minutes
+    assert_equal 0, flex1.total_hours
+    assert_equal 5, flex1.total_minutes
+
+    assert_equal -1, flex2.hours
+    assert_equal 0, flex2.minutes
+    assert_equal 0, flex2.total_hours
+    assert_equal -55, flex2.total_minutes
+
+
+    assert_equal '-0:55', @user.flex_time
+  end
+
+  def test_negative_input
+    flex = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 0,
+                                :hours => -1,
+                                :positive => true)
+    assert_valid flex
+    assert flex.hours < 0
+    assert_equal false, flex.positive
+  end
+
+  def test_double_negative_input
+    flex = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 0,
+                                :hours => -1,
+                                :positive => false)
+    assert_not_valid flex
+    assert flex.errors[:base].include?('You can not provide a double-negative time.')
+  end
+
+
   # INVALID tests
   def test_invalid_no_input
     flex = Flex.new
@@ -335,5 +380,6 @@ class FlexTest < ActiveSupport::TestCase
     assert flex.errors[:comment]
     assert flex.errors[:user]
   end
+
 
 end

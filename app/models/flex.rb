@@ -1,6 +1,8 @@
+#include ActionView::Helpers
+
 class Flex < ActiveRecord::Base
 
-  include ActionView::Helpers
+  include ApplicationHelper
 
   belongs_to :user
 
@@ -24,6 +26,8 @@ class Flex < ActiveRecord::Base
       end
       self.hours ||= 0
       self.minutes ||= 0
+      self.total_hours ||= 0
+      self.total_minutes ||= 0
       self.positive = true if self.positive.nil?
       self.discarded = false if self.discarded.nil?
     end
@@ -32,6 +36,11 @@ class Flex < ActiveRecord::Base
   def hours_and_or_minutes
     if hours.in?([nil,0,'0']) and minutes.in?([nil,0,'0'])
       errors.add :base, 'Hours or minutes must be more than zero. (Flexing your time by nothing is leaving it be)'
+    end
+    if self.new_record?
+      if self.positive.in?([false,0,'0']) and (self.hours < 0 or self.minutes < 0)
+        errors.add :base, 'You can not provide a double-negative time.'
+      end
     end
   end
 
@@ -43,18 +52,18 @@ class Flex < ActiveRecord::Base
   end
 
   def total_minutes_to_hours
-    if self.total_minutes >= 60
-      self.total_hours = self.total_hours += self.total_minutes/60
-      self.total_minutes = self.total_minutes % 60
-    end
-    # clears some odditites while using mod and negative numbers
-    if self.total_minutes <= -60
+    # clear some oddities
+    self.positive = self.total_minutes > 0
+    negative_minutes = !self.positive
+    if negative_minutes
       self.total_hours = self.total_hours * -1
       self.total_minutes = self.total_minutes * -1
+    end
 
-      self.total_hours = self.total_hours += self.total_minutes/60
-      self.total_minutes = self.total_minutes % 60
+    self.total_hours = self.total_minutes / 60
+    self.total_minutes = self.total_minutes % 60
 
+    if negative_minutes
       self.total_hours = self.total_hours * -1
       self.total_minutes = self.total_minutes * -1
     end
@@ -67,11 +76,12 @@ class Flex < ActiveRecord::Base
       self.hours = self.hours.abs*-1
     end
     if last_position
-      self.total_hours = self.hours + last_position.total_hours
-      self.total_minutes = self.minutes + last_position.total_minutes
+      #self.total_hours = self.hours + last_position.total_hours
+      self.total_minutes = self.minutes + last_position.total_minutes +
+          (last_position.total_hours * 60) + (self.hours * 60)
     else
-      self.total_hours = self.hours
-      self.total_minutes = self.minutes
+      #self.total_hours = self.hours
+      self.total_minutes = self.minutes + (self.hours * 60)
     end
     self.total_minutes_to_hours
   end
@@ -102,11 +112,12 @@ class Flex < ActiveRecord::Base
   end
 
   def show_time
-    "#{show_boolean_plusminus(positive)}#{hours}:#{sprintf '%02d', minutes}"
+    "#{show_boolean_plusminus(positive)}#{hours.abs}:#{sprintf '%02d', minutes.abs}"
   end
 
   def show_total_time
-    "#{show_boolean_plusminus((total_hours <= 0 or total_minutes <= 0))}#{total_hours}:#{sprintf '%02d', total_minutes}"
+    positive_total = ((self.total_hours * 60) + self.total_minutes) > 0
+    "#{show_boolean_plusminus(positive_total)}#{total_hours.abs}:#{sprintf '%02d', total_minutes.abs}"
   end
 
 end

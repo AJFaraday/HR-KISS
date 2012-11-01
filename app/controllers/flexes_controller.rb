@@ -16,17 +16,22 @@ class FlexesController < ApplicationController
   def create
     @flex = Flex.new(params[:flex])
     @user = @flex.user
-    @flexes = @user.flexes.for_timeline
     if @flex.save
       if @user == current_user
         flash[:notice] = "You've logged this flex on your timeline."
       else
         flash[:notice] = "You've logged this flex for #{@user.name}"
       end
+      @flex = Flex.new(:user_id => @user.id)
     else
-      flash[:error] = "Something's wrong, this flex could not be logged.'"
+      flash[:error] = "Something's wrong, this flex could not be logged."
     end
-    render :index
+    if params[:back_action] == 'application/overview'
+      @flexes = @user.flexes.for_timeline(5)
+    else
+      @flexes = @user.flexes.for_timeline
+    end
+    render params[:back_action]
   end
 
   def discard

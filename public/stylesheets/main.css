@@ -68,3 +68,12 @@ label {
 table.box_report tbody tr td {
   text-align: center;
 }
+
+table.timeline{
+
+}
+
+
+table.timeline tbody.current tr td {
+  text-align: center;
+}

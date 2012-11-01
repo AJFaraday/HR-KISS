@@ -36,9 +36,9 @@ HTML
     opts[:false_image] ? false_image = opts[:false_image] : false_image = '/images/tick.png'
 
     if value
-      return raw "<img src='#{true_image}'>"
+      return ActiveSupport::SafeBuffer.new "<img src='#{true_image}'>"
     else
-      return raw "<img src='#{false_image}'>"
+      return ActiveSupport::SafeBuffer.new "<img src='#{false_image}'>"
     end
   end
 

@@ -12,10 +12,10 @@
     <% @flexes.each do |flex| %>
       <tr>
         <td><%= flex.position %></td>
-        <td><%= flex.show_time %></td>
-        <td><%= flex.show_total_time %></td>
+        <td><%= raw flex.show_time %></td>
+        <td><%= raw flex.show_total_time %></td>
         <td><%= flex.comment%></td>
-        <td><%# TODO actions (discard/restore)  %> %></td>
+        <td><%# TODO actions (discard/restore) %></td>
       </tr>
     <% end %>
   </tbody>
@@ -34,11 +34,15 @@
     <tr>
       <% hr_form_for @flex do |form| %>
         <%= form.hidden_field :user_id %>
+        <% if back_action %>
+          <%= hidden_field_tag :back_action, back_action %>
+        <% end %>
 
-        <td colspan=3 height=30 >
+        <td></td>
+        <td colspan=2 height=30 style='width:180px;' >
           <div style='float:left'><%= form.plusminus_check_box :positive %></div>
           <div style='margin-top:3px;width:120px'>
-            <%= form.text_field :hours, :size => 2, :skip_label => true %>:<%= form.text_field :minutes, :size => 2, :skip_label => true %>
+            <%= form.text_field :hours, :size => 1, :skip_label => true %>:<%= form.text_field :minutes, :size => 1, :skip_label => true %>
           </div>
         </td>
         <td ><%= form.text_field :comment, :size => 20, :skip_label => true %></td>

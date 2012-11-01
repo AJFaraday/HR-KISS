@@ -17,12 +17,16 @@ class User < ActiveRecord::Base
     end
 
     def for_timeline(limit=:all)
-      if limit and limit != :all
-        result = Flex.find_by_sql("select * from flexes where user_id = #{user_id} order by position desc limit #{limit}")
+      if any?
+        if limit and limit != :all
+          result = Flex.find_by_sql("select * from flexes where user_id = #{self[0].user_id} order by position desc limit #{limit}")
+        else
+          result = Flex.find_by_sql("select * from flexes where user_id = #{self[0].user_id} order by position desc")
+        end
+        return result.reverse
       else
-        result = Flex.find_by_sql("select * from flexes where user_id = #{user_id} order by position desc")
+        return []
       end
-      return result.reverse
     end
 
   end
