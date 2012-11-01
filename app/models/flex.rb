@@ -1,5 +1,7 @@
 class Flex < ActiveRecord::Base
 
+  include ActionView::Helpers
+
   belongs_to :user
 
   default_scope :order => 'position ASC'
@@ -98,5 +100,13 @@ class Flex < ActiveRecord::Base
   def to_s
     "#{user.name} - #{position} - #{hours}:#{minutes} - #{total_hours}:#{total_minutes}"
   end
-  
+
+  def show_time
+    "#{show_boolean_plusminus(positive)}#{hours}:#{sprintf '%02d', minutes}"
+  end
+
+  def show_total_time
+    "#{show_boolean_plusminus((total_hours <= 0 or total_minutes <= 0))}#{total_hours}:#{sprintf '%02d', total_minutes}"
+  end
+
 end

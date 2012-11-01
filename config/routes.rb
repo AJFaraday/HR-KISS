@@ -14,6 +14,13 @@ HRKISS::Application.routes.draw do
     end
   end
 
+  resources :flexes do
+    member do
+      get 'discard'
+      get 'restore'
+    end
+  end
+
   root :to => 'application#index'
 
   # first created -> highest priority.

@@ -10,10 +10,19 @@ class User < ActiveRecord::Base
 
   before_save :set_days
 
-  has_many :flexes, :order => 'position ASC' do
+  has_many :flexes, :order => 'position DESC' do
 
     def most_recent
       find_by_position_and_discarded maximum('position'), false
+    end
+
+    def for_timeline(limit=:all)
+      if limit and limit != :all
+        result = Flex.find_by_sql("select * from flexes where user_id = #{self.id} order by position desc limit #{limit}")
+      else
+        result = Flex.find_by_sql("select * from flexes where user_id = #{self.id} order by position desc")
+      end
+      return result.reverse
     end
 
   end
@@ -146,7 +155,11 @@ class User < ActiveRecord::Base
   end
 
   def flex_time
-    "#{'-' unless flexes.last.positive}#{flexes.most_recent.total_hours.abs}:#{sprintf '%02d', flexes.most_recent.total_minutes.abs}"
+    if flexes.most_recent
+      "#{'-' unless flexes.most_recent.positive}#{flexes.most_recent.total_hours.abs}:#{sprintf '%02d', flexes.most_recent.total_minutes.abs}"
+    else
+      '0:00'
+    end
   end
 
 end

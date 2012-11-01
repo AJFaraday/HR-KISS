@@ -42,6 +42,10 @@ HTML
     end
   end
 
+  def show_boolean_plusminus(value)
+    show_boolean(value, :true_image => '/images/plus.png', :false_image => '/images/minus.png')
+  end
+
   def hr_form_for(object, options={}, &block)
     concat(capture do
       form_for(object, options.merge(:builder => HrFormBuilder), &block)
