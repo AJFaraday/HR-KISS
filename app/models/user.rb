@@ -10,6 +10,14 @@ class User < ActiveRecord::Base
 
   before_save :set_days
 
+  has_many :flexes, :order => 'position ASC' do
+
+    def most_recent
+      find_by_position_and_discarded maximum('position'), false
+    end
+
+  end
+
   acts_as_authentic do |auth|
     auth.login_field = "login"
   end
@@ -135,6 +143,10 @@ class User < ActiveRecord::Base
 
   def sick_day_numbers
     "#{sick_days_remaining}/#{sick_day_allowance}"
+  end
+
+  def flex_time
+    "#{'-' unless flexes.last.positive}#{flexes.most_recent.total_hours.abs}:#{sprintf '%02d', flexes.most_recent.total_minutes.abs}"
   end
 
 end

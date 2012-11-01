@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  positive: false
+  hours: 1
+  minutes: 1
+  comment: MyString
+  position: 1
+  total_hours: 1
+  total_minutes: 1
+  discarded: false
+
+two:
+  positive: false
+  hours: 1
+  minutes: 1
+  comment: MyString
+  position: 1
+  total_hours: 1
+  total_minutes: 1
+  discarded: false

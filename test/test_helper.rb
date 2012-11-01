@@ -10,6 +10,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def assert_valid(object, message=nil)
+    puts object.errors.full_messages.join("\r\n") unless object.valid?
     assert_block(build_message(message, "<?> is not valid.", object.class.to_s)) {object.valid?}
   end
 
