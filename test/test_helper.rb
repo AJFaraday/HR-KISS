@@ -19,5 +19,4 @@ class ActiveSupport::TestCase
     assert_block(build_message(message, "<?> should not be valid.", object.class.to_s)) {!object.valid?}
   end
 
-  # Add more helper methods to be used by all tests here...
 end
