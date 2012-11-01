@@ -34,7 +34,7 @@ class Flex < ActiveRecord::Base
   end
 
   def hours_and_or_minutes
-    if hours.in?([nil,0,'0']) and minutes.in?([nil,0,'0'])
+    if hours.in?([nil,0,'0']) and minutes.in?([nil,0,'0']) and self.new_record?
       errors.add :base, 'Hours or minutes must be more than zero. (Flexing your time by nothing is leaving it be)'
     end
     if self.new_record?
@@ -45,10 +45,9 @@ class Flex < ActiveRecord::Base
   end
 
   def minutes_to_hours
-    if self.minutes >= 60
-      self.hours = self.hours += self.minutes/60
-      self.minutes = self.minutes % 60
-    end
+    self.minutes = self.minutes + (self.hours * 60)
+    self.hours = self.minutes/60
+    self.minutes = self.minutes % 60
   end
 
   def total_minutes_to_hours

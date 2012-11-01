@@ -37,6 +37,8 @@ class FlexesController < ApplicationController
   def discard
     @flex.update_attribute :discarded, true
     flash[:notice] = "You've chucked out that flex."
+
+    @flex.reload
     if params[:back_action] == 'application/overview'
       redirect_to root_path()
     else
