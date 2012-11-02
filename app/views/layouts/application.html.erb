@@ -9,7 +9,30 @@
 </head>
 <body>
 
-<div class='header'>
+<div class='header_holder'>
+  <div class='header_center'>
+    <%= image_tag '/images/layout/header.jpg', :class => 'header' %>
+    <% if current_user %>
+        <%= link_to (image_tag '/images/layout/home2.png', :class => 'button_top_1'), root_url %>
+        <%= link_to (image_tag '/images/layout/account.png', :class => 'button_top_2'), user_path(current_user) %>
+        <%= link_to (image_tag '/images/layout/logout.png', :class => 'button_top_3'), logout_url %>
+        <%= link_to (image_tag '/images/layout/absence.png', :class => 'button_bottom_1'), absences_path %>
+        <%= link_to (image_tag '/images/layout/flex.png', :class => 'button_bottom_2'), flexes_path %>
+    <% else %>
+      <%= link_to (image_tag '/images/layout/home1.png', :class => 'button_no_user_1'), root_url %>
+      <%= link_to (image_tag '/images/layout/login.png', :class => 'button_no_user_2'), login_url %>
+    <% end %>
+    <div class='message_holder'>
+      <%= render :partial => 'shared/flash_messages' %>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!--
+<div class='menus'>
   <div id="app_menu" class='menu'>
     <% if current_user %>
       <%= menu_items([{:text => 'Home', :url => root_url},
@@ -17,7 +40,7 @@
                       {:text => 'Absences', :url => absences_path()},
                       {:text => 'Flex Time Timeline', :url => flexes_path()},
                       {:text => 'Log out', :url => logout_url}]) %>
-    <% else %><!-- No user logged in -->
+    <% else %>
       <%= menu_items([{:text => 'Home', :url => root_url}]) %>
       <%= menu_items([{:text =>'Log in', :url => login_path}]) unless params[:action] == 'new' and params[:controller] = 'user_sessions' %>
     <% end %>
@@ -37,10 +60,14 @@
   </div>
 
 </div>
+-->
 
-<%= render :partial => 'shared/flash_messages' %>
 
-<%= yield %>
+<div class='main_holder'>
+  <div class='box_full'>
+    <%= yield %>
+  </div>
+</div>
 
 </body>
 </html>

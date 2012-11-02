@@ -1,4 +1,4 @@
-<div class='box_full'>
+
   <h1>HR Overview</h1>
   <p>You are logged in as <b><%= current_user.name %><%= "(admin)" if current_user.is_admin? %></b>.</p>
   <p>You have <b><%= current_user.holiday_remaining %>/<%= current_user.holiday_allowance %></b> days of holiday this year.</p>
@@ -11,7 +11,7 @@
     <p>You are your own line manager. You may wish to rectify this situation.</p>
   <% end %>
   <p <%= "style='color:red;'" if current_user.flex_time.include? '-' %> >You have <b><%= current_user.flex_time %></b> of flex time.</p>
-</div>
+
 <div class='box_left'>
   <%= render :partial => 'flex_overview' %>
 </div>
