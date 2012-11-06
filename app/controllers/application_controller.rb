@@ -11,8 +11,6 @@ class ApplicationController < ActionController::Base
       @flex = current_user.flexes.new
       render :overview
     end
-    flash[:error] = 'I am an error'
-    flash[:notice] = 'I am an notice'
   end
 
   def overview
