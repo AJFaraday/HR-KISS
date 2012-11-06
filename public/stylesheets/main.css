@@ -26,6 +26,31 @@ img.header{
   width: 100.5%;
 }
 
+a img {
+  border: none;
+}
+
+a:hover img.button_top_1{
+  height: 70px;
+}
+
+a:hover img.button_top_2{
+  height: 72px;
+}
+
+a:hover img.button_top_3{
+  height: 72px;
+}
+
+a:hover img.button_bottom_1{
+  height: 87px;
+}
+
+a:hover img.button_bottom_2{
+  height: 87px;
+}
+
+
 img.button_no_user_1 {
   left: 550px;
   position: absolute;
