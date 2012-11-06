@@ -379,8 +379,46 @@ class FlexTest < ActiveSupport::TestCase
     assert_equal 0, flex.hours
   end
 
-  def test_repeated_discard_and_restore
-    # TODO issue, discarding and restoring flexes seems to continue to reduce the amount of remaining flex-time
+  def test_repeated_discard_and_restore_positive
+    flex = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 60,
+                                :hours => 0,
+                                :positive => true)
+    assert_equal '1:00', @user.flex_time
+    @user.flexes.create(:comment => 'test flex',
+                        :minutes => 20,
+                        :hours => 0,
+                        :positive => true)
+    assert_equal '1:20', @user.flex_time
+    flex.update_attribute :discarded, true
+    assert_equal '0:20', @user.flex_time
+    flex.update_attribute :discarded, false
+    assert_equal '1:20', @user.flex_time
+    flex.update_attribute :discarded, true
+    assert_equal '0:20', @user.flex_time
+    flex.update_attribute :discarded, false
+    assert_equal '1:20', @user.flex_time
+  end
+
+  def test_repeated_discard_and_restore_negative
+    flex = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 60,
+                                :hours => 0,
+                                :positive => false)
+    assert_equal '-1:00', @user.flex_time
+    @user.flexes.create(:comment => 'test flex',
+                        :minutes => 20,
+                        :hours => 0,
+                        :positive => true)
+    assert_equal '-0:40', @user.flex_time
+    flex.update_attribute :discarded, true
+    assert_equal '0:20', @user.flex_time
+    flex.update_attribute :discarded, false
+    assert_equal '-0:40', @user.flex_time
+    flex.update_attribute :discarded, true
+    assert_equal '0:20', @user.flex_time
+    flex.update_attribute :discarded, false
+    assert_equal '-0:40', @user.flex_time
   end
 
 
