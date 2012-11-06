@@ -379,6 +379,10 @@ class FlexTest < ActiveSupport::TestCase
     assert_equal 0, flex.hours
   end
 
+  def test_repeated_discard_and_restore
+    # TODO issue, discarding and restoring flexes seems to continue to reduce the amount of remaining flex-time
+  end
+
 
   # INVALID tests
   def test_invalid_no_input
