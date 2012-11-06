@@ -47,7 +47,7 @@ class Flex < ActiveRecord::Base
   def minutes_to_hours
     self.minutes = self.minutes + (self.hours * 60)
     self.minutes = self.minutes * -1 if self.minutes > 0 and !self.positive
-    self.positive = self.minutes > 0
+    self.positive = false if self.positive and self.minutes < 0
     invert = self.minutes < 0
     self.minutes = self.minutes * -1 if invert
     self.hours = self.minutes/60
