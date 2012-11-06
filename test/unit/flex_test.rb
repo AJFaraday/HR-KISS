@@ -411,13 +411,13 @@ class FlexTest < ActiveSupport::TestCase
                                 :hours => 0,
                                 :positive => true)
     assert_equal '0:00', @user.flex_time
-    flex.update_attribute :discarded, true
-    assert_equal '-0:10', @user.flex_time
-    flex.update_attribute :discarded, false
+    flex1.update_attribute :discarded, true
+    assert_equal '0:10', @user.flex_time
+    flex1.update_attribute :discarded, false
     assert_equal '0:00', @user.flex_time
-    flex.update_attribute :discarded, true
-    assert_equal '-0:10', @user.flex_time
-    flex.update_attribute :discarded, false
+    flex1.update_attribute :discarded, true
+    assert_equal '0:10', @user.flex_time
+    flex1.update_attribute :discarded, false
     assert_equal '0:00', @user.flex_time
   end
 

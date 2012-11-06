@@ -46,18 +46,19 @@ class Flex < ActiveRecord::Base
 
   def minutes_to_hours
     self.minutes = self.minutes + (self.hours * 60)
+    self.minutes = self.minutes * -1 if self.minutes > 0 and !self.positive
+    self.positive = self.minutes > 0
     invert = self.minutes < 0
     self.minutes = self.minutes * -1 if invert
     self.hours = self.minutes/60
     self.minutes = self.minutes % 60
     self.minutes = self.minutes * -1 if invert
-    self.hours = self.hours * -1 if invert    
+    self.hours = self.hours * -1 if invert
   end
 
   def total_minutes_to_hours
     # clear some oddities
-    self.positive = self.total_minutes > 0
-    negative_minutes = !self.positive
+    negative_minutes = self.total_minutes < 0
     if negative_minutes
       self.total_hours = self.total_hours * -1
       self.total_minutes = self.total_minutes * -1
@@ -90,7 +91,7 @@ class Flex < ActiveRecord::Base
   # When a flex is discarded (crossed out), all the later totals have to change
   def cascade_totals
     later_flexes = user.flexes.all(:conditions => ['position > ?', self.position],
-                                   :order => 'position ASC')
+                                   :order => 'position DESC')
     later_flexes.each do |flex|
       flex.save!
     end

@@ -154,7 +154,7 @@ class Absence < ActiveRecord::Base
   end
 
   def calendar_title
-    "#{user.name} - #{variety} - #{reason}"
+    "#{user.name} - #{variety} - #{reason} #{"- (pending approval)" if status == 'Pending'}"
   end
 
   def show_times(line_breaks = false)

@@ -159,9 +159,11 @@ class User < ActiveRecord::Base
     "#{sick_days_remaining}/#{sick_day_allowance}"
   end
 
+
   def flex_time
     if flexes.most_recent
-      "#{'-' unless flexes.most_recent.positive}#{flexes.most_recent.total_hours.abs}:#{sprintf '%02d', flexes.most_recent.total_minutes.abs}"
+      negative = (flexes.most_recent.total_minutes + (flexes.most_recent.total_hours * 60)) < 0
+      "#{'-' if negative}#{flexes.most_recent.total_hours.abs}:#{sprintf '%02d', flexes.most_recent.total_minutes.abs}"
     else
       '0:00'
     end
