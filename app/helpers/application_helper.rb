@@ -33,7 +33,7 @@ HTML
 
   def show_boolean(value, opts={})
     opts[:true_image] ? true_image = opts[:true_image] : true_image = '/images/tick.png'
-    opts[:false_image] ? false_image = opts[:false_image] : false_image = '/images/tick.png'
+    opts[:false_image] ? false_image = opts[:false_image] : false_image = '/images/cross.png'
 
     if value
       return ActiveSupport::SafeBuffer.new "<img src='#{true_image}'>"
