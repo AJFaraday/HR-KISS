@@ -50,6 +50,14 @@ a:hover img.button_bottom_2{
   height: 87px;
 }
 
+a:hover img.button_no_user_1{
+  height: 102px;
+}
+
+a:hover img.button_no_user_2{
+  height: 104px;
+}
+
 
 img.button_no_user_1 {
   left: 550px;
