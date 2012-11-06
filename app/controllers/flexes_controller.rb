@@ -26,6 +26,7 @@ class FlexesController < ApplicationController
     else
       flash[:error] = "Something's wrong, this flex could not be logged."
     end
+    @user.reload
     if params[:back_action] == 'application/overview'
       @flexes = @user.flexes.for_timeline(5)
     else

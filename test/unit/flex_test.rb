@@ -357,7 +357,7 @@ class FlexTest < ActiveSupport::TestCase
                                 :hours => -1,
                                 :positive => true)
     assert_valid flex
-    assert flex.hours < 0
+    assert_equal -1, flex.hours
     assert_equal false, flex.positive
   end
 
@@ -401,24 +401,31 @@ class FlexTest < ActiveSupport::TestCase
   end
 
   def test_repeated_discard_and_restore_negative
-    flex = @user.flexes.create(:comment => 'test flex',
-                                :minutes => 60,
+    flex1 = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 10,
                                 :hours => 0,
                                 :positive => false)
-    assert_equal '-1:00', @user.flex_time
-    @user.flexes.create(:comment => 'test flex',
-                        :minutes => 20,
-                        :hours => 0,
-                        :positive => true)
-    assert_equal '-0:40', @user.flex_time
-    flex.update_attribute :discarded, true
-    assert_equal '0:20', @user.flex_time
-    flex.update_attribute :discarded, false
-    assert_equal '-0:40', @user.flex_time
-    flex.update_attribute :discarded, true
-    assert_equal '0:20', @user.flex_time
-    flex.update_attribute :discarded, false
-    assert_equal '-0:40', @user.flex_time
+    assert_equal '-0:10', @user.flex_time
+    flex2 = @user.flexes.create(:comment => 'test flex',
+                                :minutes => 10,
+                                :hours => 0,
+                                :positive => true)
+
+    assert_equal 0, flex2.hours
+    assert_equal 10, flex2.minutes
+    assert_equal 0, flex1.hours
+    assert_equal -10, flex1.minutes
+
+    #flex1.update_attribute :discarded, true
+    flex1.save
+    assert_equal 0, flex2.hours
+    assert_equal 10, flex2.minutes
+    assert_equal 0, flex1.hours
+    assert_equal -10, flex1.minutes
+
+    #flex1.update_attribute :discarded, false
+    #flex1.update_attribute :discarded, true
+    #flex1.update_attribute :discarded, false
   end
 
 
