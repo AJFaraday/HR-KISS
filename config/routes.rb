@@ -12,6 +12,9 @@ HRKISS::Application.routes.draw do
       get 'approve'
       get 'decline'
     end
+    collection do
+      get 'calendar'
+    end
   end
 
   resources :flexes do

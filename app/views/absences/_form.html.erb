@@ -1,3 +1,12 @@
+<%
+  if @absence.start_time and @absence.start_time.class.in?([ActiveSupport::TimeWithZone,DateTime,Date])
+    @absence.start_time = @absence.start_time.strftime("%d-%m-%Y")
+  end
+  if @absence.end_time and @absence.end_time.class.in?([ActiveSupport::TimeWithZone,DateTime,Date])
+    @absence.end_time = @absence.end_time.strftime("%d-%m-%Y")
+  end
+%>
+
 <%= render "shared/error_messages", :target => @absence %>
 
 <%= form.select :user_id, User.all(:order => 'name ASC').collect{|u| [u.name,u.id]} if current_user.is_admin? %>

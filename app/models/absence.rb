@@ -6,6 +6,8 @@
 
 class Absence < ActiveRecord::Base
 
+  include Rails.application.routes.url_helpers
+
   belongs_to :user
 
   delegate :line_manager, :to => :user
@@ -105,8 +107,21 @@ class Absence < ActiveRecord::Base
     end
   end
 
+
+  def to_jquery_attributes
+    {:title => "'#{calendar_title}'",
+     :start => "'#{start_time.rfc822}'" ,
+     :end => "'#{end_time.rfc822}'",
+     :url => "'#{absence_path(self)}'"}
+  end
+
+  def self.all_to_jquery
+    all.collect{|absence| absence.to_jquery_attributes}.to_json.gsub('"','')
+  end
+
   # named_scope equivalents (seems standard for rails 3)
-  def current(status = nil)
+
+  def self.current(status = nil)
     if status
       all(:conditions => ['start_time < ? and end_time > ? and status = ?',
                           Time.now, Time.now, status], :order => "start_time ASC")
@@ -116,7 +131,7 @@ class Absence < ActiveRecord::Base
 
   end
 
-  def past(status=nil)
+  def self.past(status=nil)
     if status
       all(:conditions => ['end_time < ? and status = ?', Time.now, status], :order => "start_time ASC")
     else
@@ -124,7 +139,7 @@ class Absence < ActiveRecord::Base
     end
   end
 
-  def future(status=nil)
+  def self.future(status=nil)
     if status
       all(:conditions => ['start_time > ? and status = ?', Time.now, status], :order => "start_time ASC")
     else
@@ -132,9 +147,14 @@ class Absence < ActiveRecord::Base
     end
   end
 
+
   # presentation methods
   def to_s
     "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%C')} to #{end_time.strftime('%d-%m-%C')}"
+  end
+
+  def calendar_title
+    "#{user.name} - #{variety} - #{reason}"
   end
 
   def show_times(line_breaks = false)

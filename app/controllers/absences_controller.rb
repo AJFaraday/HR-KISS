@@ -13,8 +13,16 @@ class AbsencesController < ApplicationController
     end
   end
 
+  def calendar
+    @absences = Absence.all(:conditions => ['start_time > ? and end_time < ?',
+                                            Time.now.beginning_of_month,
+                                            Time.now.end_of_month])
+  end
+
   def new
     @absence = Absence.new
+    @absence.start_time = Time.parse(params[:start]) if params[:start]
+    @absence.end_time = Time.parse(params[:end]) if params[:end]
     @absence.user_id = current_user.id
   end
 
