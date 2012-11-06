@@ -17,7 +17,7 @@
         <%= link_to (image_tag '/images/layout/home2.png', :class => 'button_top_1'), root_url %>
         <%= link_to (image_tag '/images/layout/account.png', :class => 'button_top_2'), user_path(current_user) %>
         <%= link_to (image_tag '/images/layout/logout.png', :class => 'button_top_3'), logout_url %>
-        <%= link_to (image_tag '/images/layout/absence.png', :class => 'button_bottom_1'), absences_path %>
+        <%= link_to (image_tag '/images/layout/absence.png', :class => 'button_bottom_1'), calendar_absences_path %>
         <%= link_to (image_tag '/images/layout/flex.png', :class => 'button_bottom_2'), flexes_path %>
     <% else %>
       <%= link_to (image_tag '/images/layout/home1.png', :class => 'button_no_user_1'), root_url %>
@@ -30,38 +30,19 @@
   </div>
 </div>
 
-
-
-<!--
-<div class='menus'>
-  <div id="app_menu" class='menu'>
-    <% if current_user %>
-      <%= menu_items([{:text => 'Home', :url => root_url},
-                      {:text => 'My Profile', :url => user_path(current_user)},
-                      {:text => 'Absences', :url => absences_path()},
-                      {:text => 'Flex Time Timeline', :url => flexes_path()},
-                      {:text => 'Log out', :url => logout_url}]) %>
-    <% else %>
-      <%= menu_items([{:text => 'Home', :url => root_url}]) %>
-      <%= menu_items([{:text =>'Log in', :url => login_path}]) unless params[:action] == 'new' and params[:controller] = 'user_sessions' %>
-    <% end %>
+<% if current_user and current_user.is_admin? %>
+  <div id='admin_menu' class='menu'>
+    <%= menu_title('Admin Menu')%>
+    <%= menu_items([{:text => 'Manage Users', :url => users_path},
+                    {:text => 'New User', :url => new_user_path}
+                   ]) %>
   </div>
+<% end %>
 
-  <% if current_user and current_user.is_admin? %>
-    <div id='admin_menu' class='menu'>
-      <h4 class='menu_title'>Admin Menu</h4>
-      <%= menu_items([{:text => 'Manage Users', :url => users_path},
-                      {:text => 'New User', :url => new_user_path}
-                     ]) %>
-    </div>
-  <% end %>
-
-  <div id='controller_menu' class='menu'>
-    <%= yield :menu %>
-  </div>
-
+<div id='controller_menu' class='menu'>
+  <%= yield :menu %>
 </div>
--->
+
 
 
 <div class='main_holder'>

@@ -1,8 +1,5 @@
 <h1>Absences</h1>
-<div class='box_menu'>
-  <%= link_to 'Book Absence', new_absence_path %>
-  <%= link_to 'Absences', absences_path %>
-</div>
+
 
 <% if current_user.is_admin? %>
     <% if current_user.absences_to_approve.any? %>

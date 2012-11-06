@@ -69,4 +69,8 @@ HTML
     ActiveSupport::SafeBuffer.new(result)
   end
 
+  def menu_title(title)
+    return "<h4 class='menu_title'>#{title}</h4>"
+  end
+
 end

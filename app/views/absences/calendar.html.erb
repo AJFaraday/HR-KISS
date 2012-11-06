@@ -40,5 +40,9 @@
 
 </script>
 <h1>Absence Calendar</h1>
-
+<p>Click and drag to book an absence.</p>
 <div id='calendar'></div>
+
+<% content_for :menu do %>
+  <%= menu_items(absence_menu()) %>
+<% end %>

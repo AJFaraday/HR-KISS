@@ -98,6 +98,15 @@ p {
 
 /* layout and menu*/
 
+.menu{
+  width:1200px;
+  border-bottom: 1px solid red;
+  min-height: 30px;
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 h4.menu_title {
   line-height: 20px;
   margin: 2px;
