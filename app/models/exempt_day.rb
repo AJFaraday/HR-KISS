@@ -2,6 +2,7 @@ class ExemptDay < ActiveRecord::Base
 
   validates_presence_of :day
   validates_presence_of :name
+  validates_uniqueness_of :day
 
   default_scope :order => 'day ASC'
 
