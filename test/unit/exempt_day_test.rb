@@ -37,6 +37,11 @@ class ExemptDayTest < ActiveSupport::TestCase
 
     absence.reload
     assert_equal 1.5, absence.days
+
+    # and back
+    day.destroy
+    absence.reload
+    assert_equal 2.5, absence.days
   end
 
   def test_update_absences_single_day
@@ -57,6 +62,36 @@ class ExemptDayTest < ActiveSupport::TestCase
 
     absence.reload
     assert_equal 0, absence.days
+
+    # and back
+    day.destroy
+    absence.reload
+    assert_equal 1, absence.days
+  end
+
+  def test_update_absences_half_day
+    absence = Absence.create(:start_time => '1-1-2013 00:00',
+                             :end_time => '1-1-2013 00:00',
+                             :reason => 'reason',
+                             :single_day => true,
+                             :user_id => User.find_by_admin(true).id,
+                             :variety => 'Holiday',
+                             :start_half_day => 'Afternoon')
+    assert_valid absence
+    assert_equal 0.5, absence.days
+
+    day = ExemptDay.create(:day => Date.parse('1-1-2013'),
+                     :name => 'new years day')
+    assert_valid day
+    assert_equal 1, day.absences_on_day.count
+
+    absence.reload
+    assert_equal 0, absence.days
+
+    # and back
+    day.destroy
+    absence.reload
+    assert_equal 0.5, absence.days
   end
 
 end

@@ -196,12 +196,13 @@ class Absence < ActiveRecord::Base
 
   def get_days
     set_single_day
+    count = 0
     if self.valid?
-      if single_day and start_time.to_date.workday?
+      if single_day
         if 13.in?([start_time.hour, end_time.hour])
-          count = 0.5
+          count = 0.5 if start_time.to_date.workday?
         else
-          count = 1
+          count = 1 if start_time.to_date.workday?
         end
       else
         day = start_time.to_date

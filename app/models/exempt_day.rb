@@ -7,6 +7,8 @@ class ExemptDay < ActiveRecord::Base
 
   after_save :update_absences
 
+  after_destroy :update_all_absences
+
   def to_s
     "Exempt day - #{name} - #{day.strftime('%d-%m-%Y')}"
   end
@@ -22,5 +24,11 @@ class ExemptDay < ActiveRecord::Base
     end
   end
 
+  def update_all_absences
+    Absence.all.each do |absence|
+      absence.set_days
+      absence.save!
+    end
+  end
 
 end
