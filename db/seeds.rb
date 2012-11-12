@@ -28,16 +28,17 @@ if User.count == 0
   puts admin_user.inspect
 end
 
-make_exempt_day('Christmas Day', '25-12-2012')
-make_exempt_day('Boxing Day', '26-12-2012')
-make_exempt_day('New Years Day', '1-1-2013')
-make_exempt_day('Good Friday', '29-3-2013')
-make_exempt_day('Easter Monday', '1-4-2013')
-make_exempt_day('May Bank Holiday', '6-5-2013')
-make_exempt_day('Spring Bank Holiday', '27-5-2013')
-make_exempt_day('Summer Bank Holiday', '26-8-2013')
-make_exempt_day('Christmas Day', '25-12-2013')
-make_exempt_day('Boxing Day', '26-12-2013')
+# UK bank holidays until the end of 2013
+make_exempt_day('Christmas Day',        '25-12-2012')
+make_exempt_day('Boxing Day',           '26-12-2012')
+make_exempt_day('New Years Day',        '1-1-2013')
+make_exempt_day('Good Friday',          '29-3-2013')
+make_exempt_day('Easter Monday',        '1-4-2013')
+make_exempt_day('May Bank Holiday',     '6-5-2013')
+make_exempt_day('Spring Bank Holiday',  '27-5-2013')
+make_exempt_day('Summer Bank Holiday',  '26-8-2013')
+make_exempt_day('Christmas Day',        '25-12-2013')
+make_exempt_day('Boxing Day',           '26-12-2013')
 
 
 
