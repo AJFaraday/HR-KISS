@@ -34,7 +34,8 @@
   <div id='admin_menu' class='menu'>
     <%= menu_title('Admin Menu')%>
     <%= menu_items([{:text => 'Manage Users', :url => users_path},
-                    {:text => 'New User', :url => new_user_path}
+                    {:text => 'New User', :url => new_user_path},
+                    {:text => 'Exempt Days', :url => exempt_days_path}
                    ]) %>
   </div>
 <% end %>

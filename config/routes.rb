@@ -1,4 +1,6 @@
 HRKISS::Application.routes.draw do
+  resources :exempt_days
+
   # The priority is based upon order of creation:
 
   match 'login' => "user_sessions#new",      :as => :login

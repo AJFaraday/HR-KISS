@@ -170,7 +170,7 @@ class Absence < ActiveRecord::Base
 
   # presentation methods
   def to_s
-    "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%C')} to #{end_time.strftime('%d-%m-%C')} - #{status}"
+    "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%Y')} to #{end_time.strftime('%d-%m-%Y')} - #{status}"
   end
 
   def calendar_title

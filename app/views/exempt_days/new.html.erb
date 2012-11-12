@@ -1,0 +1,12 @@
+<h1>New Exempt Day</h1>
+
+<% hr_form_for @exempt_day do |f| %>
+  <%= render :partial => 'form', :object => f, :locals => { :user => @exempt_day } %>
+  <%= f.submit "Save" %>
+<% end %>
+
+
+
+<% content_for :menu do %>
+  <%= menu_items(exempt_day_menu(@exempt_day)) %>
+<% end %>

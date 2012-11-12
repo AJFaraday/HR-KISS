@@ -1,0 +1,20 @@
+<%
+  if @exempt_day.day and @exempt_day.day.class.in?([ActiveSupport::TimeWithZone,DateTime,Date])
+    @exempt_day.day = @exempt_day.day.strftime("%d-%m-%Y")
+  end
+%>
+
+
+<%= render "shared/error_messages", :target => @exempt_day %>
+
+<%= form.text_field :name %>
+<%= form.text_field :day %>
+
+
+<script type='text/javascript'>
+  <% date_picker_options = "{ dateFormat: 'dd-mm-yy', autoSize: true, changeMonth: true, changeYear: true,
+                              firstDay: 1, minDate: '-1y', maxDate: '+1y', numberOfMonths: 2 }" %>
+  $(function() {
+    $( "#exempt_day_day" ).datepicker(<%= date_picker_options %>);
+  });
+</script>
