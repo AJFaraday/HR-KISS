@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
 
   before_save :set_days
 
-  has_many :flexes, :order => 'position DESC' do
+  has_many :flexes, :order => 'position DESC', :dependent => :destroy do
 
     def most_recent
       find_by_position_and_discarded maximum('position'), false

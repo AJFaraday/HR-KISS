@@ -45,8 +45,10 @@ class Absence < ActiveRecord::Base
 
   def avoid_overlapping
     if start_time and end_time
-      if user.absences.first(:conditions => ['start_time > ? and start_time < ?', self.start_time, self.end_time]) or
-          user.absences.first(:conditions => ['end_time > ? and end_time < ?', self.start_time, self.end_time])
+      if user.absences.first(:conditions => ['start_time > ? and start_time < ? and id != ?',
+                                             self.start_time, self.end_time, self.id]) or
+          user.absences.first(:conditions => ['end_time > ? and end_time < ? and id != ?',
+                                              self.start_time, self.end_time, self.id])
         errors.add :base, "You can not book overlapping absences."
       end
     end
@@ -55,16 +57,19 @@ class Absence < ActiveRecord::Base
   def set_start_time
     if self.start_time and self.start_time.is_a?(Time)
       set_single_day
-      if self.single_day and self.single_day.in?([true,'1'])
-        case start_half_day
-          when "Full Day"
-            self.start_time = self.start_time.change(:hour => 9)
-          when 'Afternoon'
-            self.start_time = self.start_time.change(:hour => 13)
-          when 'Morning'
-            self.start_time = self.start_time.change(:hour => 9)
-        end
+      if self.single_day and self.single_day.in?([true, '1'])
+          case start_half_day
+            when "Full Day"
+              self.start_time = self.start_time.change(:hour => 9)
+            when 'Afternoon'
+              self.start_time = self.start_time.change(:hour => 13)
+            when 'Morning'
+              self.start_time = self.start_time.change(:hour => 9)
+          end
       else
+        if self.start_half_day.empty?
+          (self.start_time.hour == 13) ? self.start_half_day = 'Lunch Time' : self.start_half_day = 'Full Day'
+        end
         if start_half_day == 'Lunch Time'
           self.start_time = self.start_time.change(:hour => 13)
         else
@@ -77,19 +82,22 @@ class Absence < ActiveRecord::Base
   end
 
   def set_end_time
-    if (self.end_time and self.end_time.is_a?(Time)) or ['1',true].any?{|x| single_day == x}
+    if (self.end_time and self.end_time.is_a?(Time)) or ['1', true].any? { |x| single_day == x }
       set_single_day
       if self.single_day and (self.single_day == '1' or self.single_day == true)
-        self.end_time = self.start_time
-        case start_half_day
-          when "Full Day"
-            self.end_time = self.end_time.change(:hour => 17)
-          when 'Afternoon'
-            self.end_time = self.end_time.change(:hour => 17)
-          when 'Morning'
-            self.end_time = self.end_time.change(:hour => 13)
-        end
+          self.end_time = self.start_time
+          case start_half_day
+            when "Full Day"
+              self.end_time = self.end_time.change(:hour => 17)
+            when 'Afternoon'
+              self.end_time = self.end_time.change(:hour => 17)
+            when 'Morning'
+              self.end_time = self.end_time.change(:hour => 13)
+          end
       else
+        if self.end_half_day.empty?
+          (self.end_time.hour == 13) ? self.end_half_day = 'Lunch Time' : self.end_half_day = 'Full Day'
+        end
         if end_half_day == 'Lunch Time'
           self.end_time = self.end_time.change(:hour => 13)
         else
@@ -130,13 +138,13 @@ class Absence < ActiveRecord::Base
 
   def to_jquery_attributes
     {:title => "'#{calendar_title}'",
-     :start => "'#{start_time.rfc822}'" ,
+     :start => "'#{start_time.rfc822}'",
      :end => "'#{end_time.rfc822}'",
      :url => "'#{absence_path(self)}'"}
   end
 
   def self.all_to_jquery
-    all.collect{|absence| absence.to_jquery_attributes}.to_json.gsub('"','')
+    all.collect { |absence| absence.to_jquery_attributes }.to_json.gsub('"', '')
   end
 
   # named_scope equivalents (seems standard for rails 3)
@@ -189,7 +197,7 @@ class Absence < ActiveRecord::Base
   def get_days
     set_single_day
     if self.valid?
-      if single_day
+      if single_day and start_time.to_date.workday?
         if 13.in?([start_time.hour, end_time.hour])
           count = 0.5
         else
@@ -214,7 +222,7 @@ class Absence < ActiveRecord::Base
       end
       return count
     else
-      logger.info 'Invalid absence, not working out days.'
+      puts 'Invalid absence, not working out days.'
       return nil
     end
   end
@@ -228,7 +236,7 @@ class Absence < ActiveRecord::Base
   end
 
   def set_single_day
-    self.single_day = (start_time.to_date == self.end_time.to_date) unless self.single_day and self.single_day.in?([true,'1'])
+    self.single_day = (start_time.to_date == self.end_time.to_date) unless self.single_day and self.single_day.in?([true, '1'])
   end
 
   def decline_confirm_message
@@ -258,6 +266,12 @@ Are you sure you want to approve this holiday?"
     e.dtend=DateTime.civil(self.end_time.year, self.end_time.month, self.end_time.day, self.end_time.hour, self.end_time.min)
     e.summary=self.to_s
     e
+  end
+
+
+  def self.on_day(day)
+    result = Absence.all(:conditions => ['start_time < ? and end_time > ?', day.end_of_day, day.beginning_of_day])
+    return result.uniq
   end
 
 

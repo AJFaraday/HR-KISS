@@ -267,7 +267,6 @@ class AbsenceTest < ActiveSupport::TestCase
     assert_valid absence
     assert_equal 13, absence.end_time.hour
     assert_equal 1.5, absence.days
-
   end
 
 end
