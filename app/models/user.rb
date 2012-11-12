@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
 
   validates_presence_of :line_manager_id
   validates_presence_of :name
+  validates_uniqueness_of :name
+  validates_numericality_of :sick_day_allowance, :greater_than_or_equal_to => 0
+  validates_numericality_of :holiday_allowance, :greater_than_or_equal_to => 0
+
 
   before_save :set_days
 

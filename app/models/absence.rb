@@ -26,12 +26,32 @@ class Absence < ActiveRecord::Base
   validate :validate_start_is_before_end
   validate :no_sick_days_in_advance
   validate :set_status
-  # TODO validate :no_overlapping_absences
+  validate :avoid_overlapping
 
   before_save :set_days
   after_save :set_user_days
 
+  after_initialize :single_day_from_dates
+
+  def single_day_from_dates
+    if start_time and end_time
+      if start_time.to_date == end_time.to_date
+        self.single_day = true
+      end
+    end
+  end
+
   # validations
+
+  def avoid_overlapping
+    if start_time and end_time
+      if user.absences.first(:conditions => ['start_time > ? and start_time < ?', self.start_time, self.end_time]) or
+          user.absences.first(:conditions => ['end_time > ? and end_time < ?', self.start_time, self.end_time])
+        errors.add :base, "You can not book overlapping absences."
+      end
+    end
+  end
+
   def set_start_time
     if self.start_time and self.start_time.is_a?(Time)
       set_single_day

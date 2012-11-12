@@ -162,4 +162,94 @@ class AbsenceTest < ActiveSupport::TestCase
     assert_equal 19.5, absence.user.holiday_remaining
   end
 
+  def test_no_overlap_surrounding_existing_absence
+    a = Absence.create(:start_time => '1-10-2012 00:00',
+                       :end_time => '1-10-2012 00:00',
+                       :single_day => true,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(true).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_valid a
+    absence = Absence.create(:start_time => '28-9-2012 00:00',
+                       :end_time => '3-10-2012 00:00',
+                       :single_day => false,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(true).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_not_valid absence
+    assert absence.errors[:base]
+    assert absence.errors[:base].include?("You can not book overlapping absences.")
+  end
+
+  def test_no_overlap_ends_on_existing
+    a = Absence.create(:start_time => '1-10-2012 00:00',
+                       :end_time => '3-10-2012 00:00',
+                       :single_day => false,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(true).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_valid a
+    absence = Absence.create(:start_time => '28-9-2012 00:00',
+                       :end_time => '2-10-2012 00:00',
+                       :single_day => false,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(true).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_not_valid absence
+    assert absence.errors[:base]
+    assert absence.errors[:base].include?("You can not book overlapping absences.")
+  end
+
+  def test_no_overlap_starts_on_existing
+    a = Absence.create(:start_time => '1-10-2012 00:00',
+                       :end_time => '3-10-2012 00:00',
+                       :single_day => false,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(true).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_valid a
+    absence = Absence.create(:start_time => '2-10-2012 00:00',
+                       :end_time => '4-10-2012 00:00',
+                       :single_day => false,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(true).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_not_valid absence
+    assert absence.errors[:base]
+    assert absence.errors[:base].include?("You can not book overlapping absences.")
+  end
+
+  def test_no_overlap_user_specific
+    a = Absence.create(:start_time => '1-10-2012 00:00',
+                       :end_time => '1-10-2012 00:00',
+                       :single_day => true,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(true).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_valid a
+    absence = Absence.create(:start_time => '28-9-2012 00:00',
+                       :end_time => '3-10-2012 00:00',
+                       :single_day => false,
+                       :reason => 'reason',
+                       :user_id => User.find_by_admin(false).id,
+                       :variety => 'Holiday',
+                       :start_half_day => 'Full Day',
+                       :end_half_day => 'Full Day')
+    assert_valid absence
+  end
+
 end
