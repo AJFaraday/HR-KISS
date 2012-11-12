@@ -14,6 +14,7 @@ HRKISS::Application.routes.draw do
     end
     collection do
       get 'calendar'
+      get 'export', :defaults => { :format => 'ics' }
     end
   end
 

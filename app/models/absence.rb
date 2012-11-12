@@ -170,7 +170,7 @@ class Absence < ActiveRecord::Base
 
   # presentation methods
   def to_s
-    "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%C')} to #{end_time.strftime('%d-%m-%C')}"
+    "#{user.name} - #{variety} - #{start_time.strftime('%d-%m-%C')} to #{end_time.strftime('%d-%m-%C')} - #{status}"
   end
 
   def calendar_title
@@ -250,6 +250,16 @@ Are you sure you want to approve this holiday?"
 Are you sure you want to approve this holiday?"
     end
   end
+
+  def ical
+    e=Icalendar::Event.new
+    e.uid="HRKISS-#{created_at.to_i}-#{self.id}"
+    e.dtstart=DateTime.civil(self.start_time.year, self.start_time.month, self.start_time.day, self.start_time.hour, self.start_time.min)
+    e.dtend=DateTime.civil(self.end_time.year, self.end_time.month, self.end_time.day, self.end_time.hour, self.end_time.min)
+    e.summary=self.to_s
+    e
+  end
+
 
 end
 

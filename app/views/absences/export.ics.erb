@@ -1,0 +1,6 @@
+<% @calendar=Icalendar::Calendar.new %>
+<% @absences.each do |absence| %>
+  <% @calendar.add absence.ical %>
+<% end %>
+<% @calendar.publish %>
+<%= @calendar.to_ical %>

@@ -78,6 +78,13 @@ Please contact #{@absence.user.line_manager.name}."
     redirect_to absence_path(@absence)
   end
 
+def export
+  @absences=Absence.all(:conditions => ['status = ?', 'Approved'])
+  respond_to do |format|
+    format.ics
+  end
+end
+
   def get_absence
     @absence = Absence.find(params[:id])
   end
