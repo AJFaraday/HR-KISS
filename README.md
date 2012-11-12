@@ -7,6 +7,8 @@ Features:
 * Simply record sick days and track your sick day allowance.
 * Simple manager acceptance for holidays.
 * Absences are recorded down to the half-day.
+* Simple absence calendar
+* Caledar export in ical (for Google Calendar)
 * Simple, easy to use flex-time timeline. 
 
 Upcoming Features (as yet, unfinished):
@@ -15,9 +17,6 @@ Upcoming Features (as yet, unfinished):
 * > when employees are over their holiday or sick-day allowance.
 * User-defined exempt days (bank holidays etc.) which won't count against holidays.
 * The next year's bank-holidays as seeds.
-* See holidays and sick days on a calendar. 
-* Absences automatically pushed to google calendar.
-* Display related google calendar on absence calendar.
 * Help/demo page when not logged in.
 
 Notes:
