@@ -7,8 +7,8 @@
 <%= show_attribute @absence, 'reason' %>
 <%= show_attribute @absence, 'status' %>
 
-<% if current_user.is_admin? %>
-  <% if @absence.status == 'Pending' and current_user == @absence.line_manager %>
+<% if current_user.is_admin? and @absence.status == 'Pending' %>
+  <% if current_user == @absence.line_manager %>
     <%= link_to image_tag('approve_button.png'),
                 approve_absence_path(@absence),
                 :confirm => @absence.approve_confirm_message %>
