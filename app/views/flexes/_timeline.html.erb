@@ -16,11 +16,12 @@
     </tr>
   </thead>
   <tbody class='current'>
+    <% last = @flexes.select{|x| x.discarded == false}.last %>
     <% @flexes.each do |flex| %>
       <tr <%= "class='strike'" if flex.discarded %> >
         <td><%= flex.position %></td>
         <td><%= raw flex.show_time %></td>
-        <td><%= raw flex.show_total_time %></td>
+        <td <%= "class=flex_total" if last and flex.id == last.id %> ><%= raw flex.show_total_time %></td>
         <td><%= flex.comment%></td>
         <% if flex.discarded %>
           <td><%= link_to image_tag('/images/restore_button.png'), restore_flex_path(flex, :back_action => back_action)  %></td>

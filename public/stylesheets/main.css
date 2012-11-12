@@ -232,3 +232,8 @@ table.timeline tbody.current tr.strike{
   text-decoration:line-through;
 
 }
+
+table.timeline tbody.current tr td.flex_total{
+  font-size: 20px;
+  font-weight: bold;
+}

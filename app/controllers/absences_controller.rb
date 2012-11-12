@@ -20,8 +20,12 @@ class AbsencesController < ApplicationController
   end
 
   def new
-    @absence = Absence.new(:start_time => Time.parse(params[:start]),
-                           :end_time => Time.parse(params[:end]))
+    if params[:start] and params[:end]
+      @absence = Absence.new(:start_time => Time.parse(params[:start]),
+                             :end_time => Time.parse(params[:end]))
+    else
+      @absence = Absence.new
+    end
     @absence.user_id = current_user.id
   end
 
