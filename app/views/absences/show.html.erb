@@ -7,19 +7,22 @@
 <%= show_attribute @absence, 'reason' %>
 <%= show_attribute @absence, 'status' %>
 
-<% if current_user.is_admin? and @absence.status == 'Pending' %>
-  <% if current_user == @absence.line_manager %>
-    <%= link_to image_tag('approve_button.png'),
-                approve_absence_path(@absence),
-                :confirm => @absence.approve_confirm_message %>
-    <%= link_to image_tag('decline_button.png'),
-                decline_absence_path(@absence),
-                :confirm => @absence.decline_confirm_message %>
-  <% else %>
-    <p style="color:red;">This absence is pending approval from <b><%= @absence.line_manager.name%></b>.</p>
-  <% end %>
+<% if @absence.status == 'Pending' %>
+    <% if current_user.is_admin? %>
+        <% if current_user == @absence.line_manager %>
+            <%= link_to image_tag('approve_button.png'),
+                        approve_absence_path(@absence),
+                        :confirm => @absence.approve_confirm_message %>
+            <%= link_to image_tag('decline_button.png'),
+                        decline_absence_path(@absence),
+                        :confirm => @absence.decline_confirm_message %>
+        <% end %>
+
+    <% else %>
+        <p style="color:red;">This absence is pending approval from <b><%= @absence.line_manager.name %></b>.</p>
+    <% end %>
 <% end %>
 
 <% content_for :menu do %>
-  <%= menu_items(absence_menu(@absence)) %>
+    <%= menu_items(absence_menu(@absence)) %>
 <% end %>
