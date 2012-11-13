@@ -4,7 +4,9 @@
   The application is simply there to schedule and track absences and flex time and make the process as smooth as possible.
 </p>
 <p>
-  An admin has just registered your user on HR-KISS with the following details:
+  An admin has just registered your user on
+  <%= link_to "HR-KISS",  "#{MAIL_CONFIG['app-domain']}#{root_path}}"  %>
+  with the following details:
 </p>
 
 <b>Full Name:</b> <%= @user.name %><br/>

@@ -283,6 +283,15 @@ Are you sure you want to approve this holiday?"
     return result.uniq
   end
 
+  def approve
+    update_attribute :status, 'Approved'
+    UserMailer.notify_absence_approved(self).deliver
+  end
+
+  def decline
+    update_attribute :status, 'Declined'
+    UserMailer.notify_absence_declined(self).deliver
+  end
 
 end
 

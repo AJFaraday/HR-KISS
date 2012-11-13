@@ -18,4 +18,20 @@ class UserMailer < ActionMailer::Base
          :subject => "Approval is needed for #{absence.to_s}")
   end
 
+  def notify_absence_declined(absence)
+    @absence = absence
+    @user = absence.user
+    mail(:to => @user.email,
+         :from => MAIL_CONFIG['username'],
+         :subject => "#{@user.line_manager.name} has declined your request for absence.")
+  end
+
+  def notify_absence_approved(absence)
+    @absence = absence
+    @user = absence.user
+    mail(:to => @user.email,
+         :from => MAIL_CONFIG['username'],
+         :subject => "#{@user.line_manager.name} has approved your request for absence.")
+  end
+
 end

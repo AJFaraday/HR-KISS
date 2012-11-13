@@ -58,7 +58,8 @@ class AbsencesController < ApplicationController
 
   def approve
     if current_user == @absence.line_manager
-      @absence.update_attribute :status, 'Approved'
+      #@absence.update_attribute :status, 'Approved'
+      @absence.approve
       flash[:notice] = "You have approved #{@absence}."
     else
       flash[:error] = "You can not approve absences for #{@absence.user.name} as you are not their line manager.<br/>
@@ -69,7 +70,8 @@ Please contact #{@absence.user.line_manager.name}."
 
   def decline
     if current_user == @absence.line_manager
-      @absence.update_attribute :status, 'Declined'
+      #@absence.update_attribute :status, 'Declined'
+      @absence.decline
       flash[:notice] = "You have declined #{@absence}."
     else
       flash[:error] = "You can not decline absences for #{@absence.user.name} as you are not their line manager.<br/>

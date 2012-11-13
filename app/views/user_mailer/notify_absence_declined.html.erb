@@ -1,0 +1,13 @@
+<h1>DENIED! :-(</h1>
+<h2><%= link_to @absence.to_s,  "#{MAIL_CONFIG['app-domain']}#{absence_path(@absence)}" %></h2>
+
+<p>
+  Your line manager (<%= @user.line_manager.name %>) has declined your reqest for absence.
+</p>
+
+<%= show_exact 'User', @absence.user.name %>
+<%= show_attribute @absence, 'start_time' %>
+<%= show_attribute @absence, 'end_time' %>
+<%= show_attribute @absence, 'days' %>
+<%= show_attribute @absence, 'reason' %>
+<%= show_attribute @absence, 'status' %>
