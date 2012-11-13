@@ -19,6 +19,19 @@ Upcoming Features (as yet, unfinished):
 * The next year's bank-holidays as seeds.
 * Help/demo page when not logged in.
 
+Install process (assumes some Ruby on Rails knowledge):
+* git clone https://github.com/AJFaraday/HR-KISS.git)
+* cd HR-KISS
+* cp config/database.template config/database.yml
+* cp config/mail.template config/mail.yml
+* (modify config files as required, I suggest creating a gmail account to send HR-KISS notifications)
+* bundle install
+* rake db:create
+* rake db:migrate
+* rake db:seed
+* rails s
+* point your browser at 'localhost:3000'
+
 Notes:
 * The application currently assumes a working environment where everyone works 9am-5pm Monday-Friday (in theory), and holidays ignore saturdays and sundays.
 * Please don't judge the graphic design elements too harshly, I have applied the KISS philosophy to the design, as well as the UI of the project.
