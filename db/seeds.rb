@@ -22,7 +22,8 @@ if User.count == 0
                          :email => 'admin@ad.min',
                          :holiday_allowance => 20,
                          :sick_day_allowance => 20,
-                         :admin => true})
+                         :admin => true,
+                         :skip_notification => true})
   admin_user.save(:validate => false)
   admin_user.line_manager_id = admin_user.id
   puts admin_user.inspect

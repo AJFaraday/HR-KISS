@@ -11,6 +11,14 @@ class User < ActiveRecord::Base
   validates_numericality_of :sick_day_allowance, :greater_than_or_equal_to => 0
   validates_numericality_of :holiday_allowance, :greater_than_or_equal_to => 0
 
+  after_create :notify_user
+  attr_accessor :skip_notification
+
+  def notify_user
+    unless skip_notification == true
+      UserMailer.notify_new_user(self).deliver
+    end
+  end
 
   before_save :set_days
 

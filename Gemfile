@@ -8,6 +8,8 @@ gem 'rake', "0.8.7"
 
 gem 'mysql'
 
+gem 'mail'
+
 gem 'authlogic'
 
 gem 'factory_girl', '2.2.0'

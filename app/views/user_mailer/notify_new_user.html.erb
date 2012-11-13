@@ -1,0 +1,18 @@
+<h1>Hello, world!</h1>
+<p>
+  Welcome to the world of HR-KISS, human relations done simply, seeded with common sense.
+  The application is simply there to schedule and track absences and flex time and make the process as smooth as possible.
+</p>
+<p>
+  An admin has just registered your user on HR-KISS with the following details:
+</p>
+
+<b>Full Name:</b> <%= @user.name %><br/>
+<b>Email:</b> <%= @user.email %><br/>
+<b>Line Manager:</b> <%= @user.line_manager.name %> (<%= @user.line_manager.email %>)<br/>
+<b>Holiday Allowance:</b> <%= @user.holiday_allowance %><br/>
+<b>Sick Day Allowance:</b> <%= @user.sick_day_allowance %><br/>
+<%= raw "<b>YOU ARE AN ADMINISTRATOR!</b>" %><br/>
+<br/>
+<b>Login:</b> <%= @user.login %><br/>
+<b>Password:</b> Ask your line manager
