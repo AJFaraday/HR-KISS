@@ -1,3 +1,5 @@
 mail:
   username:
   password:
+  # your web domain for links (e.g. http://www.hr-kiss.com)
+  app-domain:

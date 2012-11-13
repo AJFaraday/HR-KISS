@@ -1,0 +1,15 @@
+<h1>Approval Required!</h1>
+<h2><%= @absence.to_s %></h2>
+
+<%= show_exact 'User', @absence.user.name %>
+<%= show_attribute @absence, 'start_time' %>
+<%= show_attribute @absence, 'end_time' %>
+<%= show_attribute @absence, 'days' %>
+<%= show_attribute @absence, 'reason' %>
+<%= show_attribute @absence, 'status' %>
+
+
+<%= link_to image_tag("#{MAIL_CONFIG['app-domain']}/images/approve_button.png"),
+            "#{MAIL_CONFIG['app-domain']}#{approve_absence_path(@absence)}" %>
+<%= link_to image_tag("#{MAIL_CONFIG['app-domain']}/images/decline_button.png"),
+            "#{MAIL_CONFIG['app-domain']}#{decline_absence_path(@absence)}" %>

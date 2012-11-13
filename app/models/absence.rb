@@ -33,6 +33,14 @@ class Absence < ActiveRecord::Base
 
   after_initialize :single_day_from_dates
 
+  after_save :notify_user
+
+  def notify_user
+    if status == 'Pending'
+      UserMailer.notify_approval_required(self).deliver
+    end
+  end
+
   def single_day_from_dates
     if start_time and end_time
       if start_time.to_date == end_time.to_date
