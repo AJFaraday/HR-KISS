@@ -31,6 +31,7 @@ Install process (assumes some Ruby on Rails knowledge):
 * rake db:seed
 * rails s
 * point your browser at 'localhost:3000'
+* log in using admin/admin
 
 Notes:
 * The application currently assumes a working environment where everyone works 9am-5pm Monday-Friday (in theory), and holidays ignore saturdays and sundays.
