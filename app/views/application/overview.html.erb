@@ -1,11 +1,11 @@
 
   <h1>HR Overview</h1>
   <p>You are logged in as <b><%= current_user.name %><%= "(admin)" if current_user.is_admin? %></b>.</p>
-  <p>You have <b><%= current_user.holiday_remaining %>/<%= current_user.holiday_allowance %></b> days of holiday this year.</p>
+  <p>You have <b><%= current_user.holiday_numbers %></b> days of holiday this year.</p>
   <% if current_user.absences.holidays_this_year('Pending').any? %>
     <p>You have <b><%= current_user.absences.holidays_this_year('Pending').collect{|x| x.days}.sum %></b> days of holiday pending your line managers approval.</p>
   <% end %>
-  <p>You have <b><%= current_user.sick_days_remaining %>/<%= current_user.sick_day_allowance %></b> days of sick days left, this year.</p>
+  <p>You have <b><%= current_user.sick_day_numbers %></b> days of sick days left, this year.</p>
   <p>Your line manager is <b><%= current_user.line_manager.name  %></b>.</p>
   <% if current_user == current_user.line_manager %>
     <p>You are your own line manager. You may wish to rectify this situation.</p>
