@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   before_filter :require_user, :only => [:show, :edit, :update, :delete]
-  before_filter :require_admin_user, :only => [:new, :create, :index]
+  before_filter :require_admin_user, :only => [:new, :create, :index, :delete]
   before_filter :get_user, :except => [:index, :new, :create]
 
   def index
@@ -40,6 +40,18 @@ class UsersController < ApplicationController
     else
       render :action => :edit
     end
+  end
+
+  def destroy
+    if @user.destroy
+      flash[:notice] = "You've deleted this user from your records, they are no more (in the HR database)."
+    else
+      flash[:error] = "Something went wrong! This user can not be deleted... #{@user.errors.full_messages.join('<br/>')}"
+    end
+    render users_path
+  rescue => er
+    flash[:error] = "Something went wrong! This user can not be deleted... #{er.message}"
+    render users_path
   end
 
   private

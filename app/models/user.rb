@@ -164,11 +164,11 @@ class User < ActiveRecord::Base
   end
 
   def holiday_numbers
-    "#{holiday_remaining}/#{holiday_allowance}"
+    ActiveSupport::SafeBuffer.new("<span #{'style="color:red;"' if holiday_remaining < 0}>#{holiday_remaining}</span>/#{holiday_allowance}")
   end
 
   def sick_day_numbers
-    "#{sick_days_remaining}/#{sick_day_allowance}"
+    ActiveSupport::SafeBuffer.new("<span #{'style="color:red;"' if sick_days_remaining < 0}>#{sick_days_remaining}</span>/#{sick_day_allowance}")
   end
 
 

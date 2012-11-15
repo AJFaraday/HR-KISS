@@ -61,7 +61,7 @@ HTML
     result = ""
     items.each do |item|
       if item[:url]
-        result << "<span class='menu_item'>#{link_to(item[:text], item[:url])}</span>"
+        result << "<span class='menu_item'>#{link_to(item[:text], item[:url], item[:extra])}</span>"
       else
         result << "<span class='menu_item'>#{item[:text]}</span>"
       end
