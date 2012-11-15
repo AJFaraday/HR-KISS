@@ -54,9 +54,9 @@ class Absence < ActiveRecord::Base
   def avoid_overlapping
     if start_time and end_time
       if user.absences.first(:conditions => ['start_time > ? and start_time < ? and id != ?',
-                                             self.start_time, self.end_time, self.id]) or
+                                             self.start_time, self.end_time, (self.id ? self.id : 0)]) or
           user.absences.first(:conditions => ['end_time > ? and end_time < ? and id != ?',
-                                              self.start_time, self.end_time, self.id])
+                                              self.start_time, self.end_time, (self.id ? self.id : 0)])
         errors.add :base, "You can not book overlapping absences."
       end
     end
@@ -190,7 +190,7 @@ class Absence < ActiveRecord::Base
   end
 
   def calendar_title
-    "#{user.name} - #{variety} - #{reason} #{"- (pending approval)" if status == 'Pending'}"
+    "#{user.name} - #{variety} - #{reason} - (#{status})"
   end
 
   def show_times(line_breaks = false)

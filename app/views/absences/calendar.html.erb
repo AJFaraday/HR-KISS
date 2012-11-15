@@ -23,12 +23,14 @@
                 textColor: 'black',
                 ignoreTimezone: false
             },
-            {
-                events: <%= Absence.all_to_jquery %>,
-                color: '#99FF99',
+            <% User.all.each do |user| %>
+              {
+                events: <%= user.absences.all_to_jquery %>,
+                color: '<%= user.generated_colour %>',
                 textColor: 'black',
                 ignoreTimezone: false
-            },
+              },
+            <% end %>
             {
                 events: <%= ExemptDay.all_to_jquery %>,
                 color: '#FFCCCC',

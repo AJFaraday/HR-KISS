@@ -118,6 +118,9 @@ class User < ActiveRecord::Base
       end
     end
 
+    def self.all_to_jquery
+      all.collect { |absence| absence.to_jquery_attributes }.to_json.gsub('"', '')
+    end
 
   end
 
@@ -187,6 +190,18 @@ class User < ActiveRecord::Base
 
   def to_s
     self.name
+  end
+
+  def generated_colour
+    gen_colour = name.bytes.sum
+    r = (170 + (gen_colour % 55)).to_s(16)
+    gen_colour = email.bytes.sum
+    g = (170 + (gen_colour % 55)).to_s(16)
+    gen_colour = login.bytes.sum
+    b = (170 + (gen_colour % 55)).to_s(16)
+    r, b, g = [r, b, g].map { |s| if s.size == 1 then '0' + s else s end }
+    puts "#{name } #{r} #{name.bytes.sum} #{g} #{email.bytes.sum} #{b} #{login.bytes.sum}"
+    return "##{r + b + g}"
   end
 
 end
