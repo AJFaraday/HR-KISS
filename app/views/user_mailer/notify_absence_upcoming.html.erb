@@ -1,0 +1,11 @@
+<h1>This Absence is almost here!</h1>
+<h2><%= link_to @absence.to_s,  "#{MAIL_CONFIG['app-domain']}#{absence_path(@absence)}" %></h2>
+
+This absence is in <%= time_ago_in_words(@absence.start_time) %>.
+
+<%= show_exact 'User', @absence.user.name %>
+<%= show_attribute @absence, 'start_time' %>
+<%= show_attribute @absence, 'end_time' %>
+<%= show_attribute @absence, 'days' %>
+<%= show_attribute @absence, 'reason' %>
+<%= show_attribute @absence, 'status' %>

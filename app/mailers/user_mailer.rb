@@ -34,4 +34,15 @@ class UserMailer < ActionMailer::Base
          :subject => "#{@user.line_manager.name} has approved your request for absence.")
   end
 
+  def notify_absence_upcoming(absence)
+    @absence = absence
+    @user = absence.user
+    mail(:to => @user.email,
+         :from => MAIL_CONFIG['username'],
+         :subject => "Your absence is upcoming - #{absence.to_s}").deliver
+    mail(:to => @user.line_manager.email,
+         :from => MAIL_CONFIG['username'],
+         :subject => "Employee absence is upcoming - #{absence.to_s}").deliver
+  end
+
 end
