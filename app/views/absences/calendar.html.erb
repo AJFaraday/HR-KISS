@@ -28,7 +28,14 @@
                 color: '#99FF99',
                 textColor: 'black',
                 ignoreTimezone: false
-            }],
+            },
+            {
+                events: <%= ExemptDay.all_to_jquery %>,
+                color: '#FFCCCC',
+                textColor: 'black',
+                ignoreTimezone: false
+            }
+            ],
             firstDay: 1,
             selectable: true,
 			selectHelper: true,

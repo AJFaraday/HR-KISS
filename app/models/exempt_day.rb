@@ -32,4 +32,15 @@ class ExemptDay < ActiveRecord::Base
     end
   end
 
+  def to_jquery_attributes
+    {:title => "'#{name} (company exempt day)'",
+     :start => "'#{day.beginning_of_day.rfc822}'",
+     :end => "'#{day.end_of_day.rfc822}'"}
+  end
+
+  def self.all_to_jquery
+    all.collect { |exempt| exempt.to_jquery_attributes }.to_json.gsub('"', '')
+  end
+
+
 end
